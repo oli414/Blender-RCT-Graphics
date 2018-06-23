@@ -1,0 +1,44 @@
+
+**Angle evidence:**
+
+*Prerequisite:*
+Tile size: 4²
+Unit height: 1.6332
+
+*Gentle slope:*
+Right-angled triangle from 1.6332 and 4
+Angle A: 22,2 degrees
+
+*Diagonal gentle slope:*
+Right-angled triangle from 4 and 4
+Hypotenuse: 5.66
+Right-angled triangle from 1.6332 and 5.66
+Angle A: 16,1 degrees
+
+*Steep slope*
+1.6332 * 4 = 6.5328
+Right-angled triangle from 6.5328 and 4
+Angle A: 58,5 degrees
+
+*Diagonal steep slope*
+Right-angled triangle from 4 and 4
+Hypotenuse: 5.66
+Right-angled triangle from 6.5328 and 5.66
+Angle A: 49,1 degrees
+
+*Curved lift hill:*
+Medium flat turn circumference: 37.6991 / 4 = 9.424775
+Right-angled triangle from 1.6332 and 9.424775
+Angle A: 9.83 degrees
+
+Tile size = 1
+Tile diagonal = 1.4142 = sqrt(1² + 1²)
+Unit height = 0.4082 = tan(30°) * 1.4142 / 2
+Gentle slope angle = 22.2052° = atan(0.4082 / 1)
+Diagonal gentle slope angle = 16.1005°
+Steep slope angle = 58.5148° = atan(0.4082 * 4 / 1)
+Diagonal steep slope angle = 49.1035° = atan(0.4082 * 4 / 1.4142)
+
+Flat medium turn length = 2.3562 = 2 * PI * 1.5 / 4
+Curved lift hill angle = 9.8287 = atan(0.4082 / 2.3562)
+

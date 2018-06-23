@@ -1,0 +1,61 @@
+{
+    "id": "rct2.hotds",
+    "authors": ["Chris Sawyer", "Simon Foster"],
+    "version": "1.0",
+    "originalId": "0A188A80|HOTDS   |248F70CD",
+    "objectType": "ride",
+    "properties": {
+        "type": "food_stall",
+        "category": "stall",
+        "sells": "hot_dog",
+        "carsPerFlatRide": 1,
+        "carColours": [
+            [
+                ["black", "black", "black"]
+            ]
+        ]
+    },
+    "images": [
+        "$RCT2:OBJDATA/HOTDS.DAT[0..2]",
+        {"path": "images/hotds3.png", "x": -32, "y": -37, "format": "raw"},
+        {"path": "images/hotds0.png", "x": -32, "y": -36, "format": "raw"},
+        {"path": "images/hotds1.png", "x": -32, "y": -33, "format": "raw"},
+        {"path": "images/hotds2.png", "x": -32, "y": -30, "format": "raw"}
+    ],
+    "strings": {
+        "name": {
+            "en-GB": "Hot Dog Stall",
+            "fr-FR": "Hot dogs",
+            "de-DE": "Hot Dog-Stand",
+            "es-ES": "Puesto de perritos",
+            "it-IT": "Chiosco degli hot dog",
+            "nl-NL": "Hotdogkraam",
+            "sv-SE": "Korvkiosk",
+            "ko-KR": "핫도그 가게",
+            "zh-CN": "热狗店",
+            "zh-TW": "熱狗店",
+            "pt-BR": "Barraca de Cachorro-quente",
+            "cs-CZ": "Stánek s párky v rohlíku",
+            "ja-JP": "ホットドッグショップ",
+            "pl-PL": "Kiosk z hotdogami",
+            "ru-RU": "Хот-доги"
+        },
+        "description": {
+            "en-GB": "A stall selling hot dogs in rolls",
+            "fr-FR": "Boutique vendant des hot-dogs",
+            "de-DE": "Ein Stand, an dem Hot Dogs verkauft werden",
+            "es-ES": "Puesto que vende perritos calientes",
+            "it-IT": "Un chiosco che vende hot dog",
+            "nl-NL": "Een kraam waar hotdogs worden verkocht.",
+            "sv-SE": "Ett stånd som säljer korv med bröd",
+            "ko-KR": "핫도그를 파는 가게",
+            "zh-CN": "一家在卖热狗的店",
+            "zh-TW": "一家在賣熱狗的店",
+            "pt-BR": "Uma barraca vendendo cachorros-quentes",
+            "cs-CZ": "Stánek prodávající párky v rohlíku",
+            "ja-JP": "ホットドッグを売る売店です",
+            "pl-PL": "Stoisko sprzedające parówki w bułeczkach",
+            "ru-RU": "Палатка с хот-догами."
+        }
+    }
+}
