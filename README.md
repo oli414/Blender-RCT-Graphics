@@ -39,4 +39,4 @@ The images will be outputted to (by default) the output folder which is relative
 
 # Note
 
-The textures used in a distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
+The textures distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
