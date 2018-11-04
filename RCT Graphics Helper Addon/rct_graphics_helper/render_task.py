@@ -46,8 +46,8 @@ def post_render(context, index):
 
     script_file = os.path.realpath(__file__)
     directory = os.path.dirname(script_file)
-    palettePath = directory + ("/res/palette.gif" if os.name != 'nt' else "\\res\\palette.gif")
-    result = str(subprocess.check_output(magickPath + " " + outputPath + " -fuzz 0 -fill none -opaque \"rgb(57,59,57)\"  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palettePath + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.width/2 - page.x] %[fx:page.height/2 - page.y]\" -write info: " + outputPath, shell=True))
+    palettePath = directory + "\\res\\palette.gif"
+    result = str(subprocess.check_output(magickPath + " " + outputPath + " -fuzz 0 -fill none -opaque rgb(57,59,57)  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palettePath + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.width/2 - page.x] %[fx:page.height/2 - page.y]\" -write info: " + outputPath, shell=True))
     
     offset_file = open(get_offset_output_path(context, index), "w")
     offset_file.write(result[2:][:-1])
@@ -57,6 +57,9 @@ class AngleSectionTask(object):
     section = None
     frame = None
     frame_index = 0
+    anim_start = 0
+    anim_count = 1
+    anim_index = 0
     sub_index = 0
     out_index = None
     status = "CREATED"
@@ -69,9 +72,12 @@ class AngleSectionTask(object):
         self.inverted = section_in.inverted
         self.section = section_in.angle_section
         self.out_index = out_index_start
+        self.anim_start = section_in.anim_frame_index
+        self.anim_count = section_in.anim_frame_count
         self.frame = None
         self.frame_index = 0
         self.sub_index = 0
+        self.anim_index = 0
         self.status = "CREATED"
         self.context = context
 
@@ -93,12 +99,16 @@ class AngleSectionTask(object):
         if self.inverted:
             extra_roll = 180
 
+        self.context.scene.frame_set(self.anim_start + self.anim_index)
         rotate_rig(self.context, angle, frame[2], frame[3] + extra_roll, frame[4])
         render(self.context, self.out_index)
         post_render(self.context, self.out_index)
 
         self.out_index += 1
-        self.sub_index += 1
+        self.anim_index += 1
+        if self.anim_index == self.anim_count:
+            self.anim_index = 0
+            self.sub_index += 1
         if self.sub_index == self.frame[1]:
             self.sub_index = 0
             self.frame_index += 1
@@ -112,10 +122,14 @@ class RenderTaskSection(object):
     angle_section = None
     inverted = False
     render_layer = 0
-    def __init__(self, angle_section, render_layer = 0, inverted = False):
+    anim_frame_index = 0
+    anim_frame_count = 1
+    def __init__(self, angle_section, render_layer = 0, inverted = False, frame_index = 0, frame_count = 1):
         self.angle_section = angle_section
         self.inverted = inverted
         self.render_layer = render_layer
+        self.anim_frame_index = frame_index
+        self.anim_frame_count = frame_count
 
 
 class RenderTask(object):
@@ -134,8 +148,8 @@ class RenderTask(object):
         self.section_task = None
         self.context = context
 
-    def add(self, angle_section, render_layer = 0, inverted = False):
-        self.sections.append(RenderTaskSection(angle_section, render_layer, inverted))
+    def add(self, angle_section, render_layer = 0, inverted = False, frame_index = 0, frame_count = 1):
+        self.sections.append(RenderTaskSection(angle_section, render_layer, inverted, frame_index, frame_count))
 
     def step(self):
         if self.section_task is None:

@@ -23,7 +23,7 @@ class GeneralProperties(bpy.types.PropertyGroup):
         description="Directory to output the sprites to",
         maxlen= 1024,
         subtype='DIR_PATH',
-        default= "//output/" if os.name != 'nt' else "//output\\")
+        default= "//output\\")
 
     
 class VehiclesPanel(bpy.types.Panel):

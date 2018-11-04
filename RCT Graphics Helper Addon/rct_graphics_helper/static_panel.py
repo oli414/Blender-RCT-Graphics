@@ -27,7 +27,7 @@ class RenderStatic(RCTRender, bpy.types.Operator):
         self.props = self.scene.rct_graphics_helper_static_properties
 
         self.renderTask = RenderTask(context.scene.rct_graphics_helper_general_properties.out_start_index, context)
-        self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], 0, False)
+        self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], 0, False, 0, self.props.number_of_animation_frames)
 
         return super(RenderStatic, self).execute(context)
         
@@ -40,6 +40,12 @@ class StaticProperties(bpy.types.PropertyGroup):
         name = "Viewing Angles",
         description = "Number of viewing angles to render for",
         default = 4,
+        min = 1)
+        
+    number_of_animation_frames = bpy.props.IntProperty(
+        name = "Animation Frames",
+        description = "Number of animation frames. For example in use for animated scenery and/or rides.",
+        default = 1,
         min = 1)
 
     
@@ -57,6 +63,9 @@ class StaticPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(properties, "viewing_angles")
+        
+        row = layout.row()
+        row.prop(properties, "number_of_animation_frames")
         
         row = layout.row()
         row.operator("render.rct_static", text = "Render Static Object")

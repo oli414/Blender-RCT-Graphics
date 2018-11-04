@@ -12,7 +12,7 @@ import math
 import os
 
 from . render_operator import RCTRender
-from . angle_sections.track import track_angle_sections
+from . angle_sections.track import track_angle_sections, track_angle_sections_names
 from . render_task import *
     
 
@@ -36,22 +36,32 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
             i += 1
 
     def append_angles_to_rendertask(self, render_layer, inverted):
-        for key, track_section in track_angle_sections.items():
+        start_anim = 0
+        if self.props.number_of_animation_frames != 1:
+            start_anim = 4
+        anim_count = self.props.number_of_animation_frames
+        for i in range(len(track_angle_sections_names)):
+            key = track_angle_sections_names[i]
+            track_section = track_angle_sections[key]
             if self.key_is_property(key):
                 if self.property_value(key):
-                    self.renderTask.add(track_section, render_layer, inverted)
+                    self.renderTask.add(track_section, render_layer, inverted, start_anim, anim_count)
             elif key == "VEHICLE_SPRITE_FLAG_GENTLE_SLOPE_BANKED_TURNS" or key == "VEHICLE_SPRITE_FLAG_GENTLE_SLOPE_BANKED_TRANSITIONS":
                 if self.property_value("SLOPED_TURNS"):
-                    self.renderTask.add(track_section, render_layer, inverted)
+                    self.renderTask.add(track_section, render_layer, inverted, start_anim, anim_count)
             elif key == "VEHICLE_SPRITE_FLAG_FLAT_TO_GENTLE_SLOPE_WHILE_BANKED_TRANSITIONS":
                 if self.property_value("SLOPED_TURNS") and self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED"):
-                    self.renderTask.add(track_section, render_layer, inverted)
+                    self.renderTask.add(track_section, render_layer, inverted, start_anim,anim_count)
             elif key == "VEHICLE_SPRITE_FLAG_DIAGONAL_GENTLE_SLOPE_BANKED_TRANSITIONS":
                 if self.property_value("SLOPED_TURNS") and self.property_value("VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPES"):
-                    self.renderTask.add(track_section, render_layer, inverted)
+                    self.renderTask.add(track_section, render_layer, inverted, start_anim, anim_count)
             elif key == "VEHICLE_SPRITE_FLAG_FLAT_TO_GENTLE_SLOPE_BANKED_TRANSITIONS":
                 if self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED") and self.property_value("VEHICLE_SPRITE_FLAG_GENTLE_SLOPES"):
-                    self.renderTask.add(track_section, render_layer, inverted)
+                    self.renderTask.add(track_section, render_layer, inverted, start_anim, anim_count)
+            elif key == "VEHICLE_SPRITE_FLAG_RESTRAINT_ANIMATION" and inverted == False:
+                if self.props.restraint_animation:
+                    self.renderTask.add(track_section, render_layer, inverted, 1, 3)
+                    
 
     def execute(self, context):
         self.scene = context.scene
@@ -163,6 +173,12 @@ class VehicleProperties(bpy.types.PropertyGroup):
         description = "Number of unqique sets of riders. Usually just the amount of riders for this vehicle. Some rides for example only expect rides in sets of 2 to lower the amount of required graphics. This is often done on vehicles which carry 4 or more riders.",
         default = 2,
         min = 0)
+        
+    number_of_animation_frames = bpy.props.IntProperty(
+        name = "Animation Frames",
+        description = "Number of animation frames. For example in use for swinging, rotating or animated ride vehicles.",
+        default = 1,
+        min = 1)
 
 class VehiclesPanel(bpy.types.Panel):
     bl_label = "RCT Vehicles"
@@ -196,6 +212,9 @@ class VehiclesPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(properties, "number_of_rider_sets")
+
+        row = layout.row()
+        row.prop(properties, "number_of_animation_frames")
 
         row = layout.row()
         row.operator("render.rct_vehicle", text = "Render Vehicle")
