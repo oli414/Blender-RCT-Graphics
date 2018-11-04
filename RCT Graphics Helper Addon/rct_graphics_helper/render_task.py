@@ -47,7 +47,7 @@ def post_render(context, index):
     script_file = os.path.realpath(__file__)
     directory = os.path.dirname(script_file)
     palettePath = directory + "\\res\\palette.gif"
-    result = str(subprocess.check_output(magickPath + " " + outputPath + " -fuzz 0 -fill none -opaque rgb(57,59,57)  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palettePath + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.width/2 - page.x] %[fx:page.height/2 - page.y]\" -write info: " + outputPath, shell=True))
+    result = str(subprocess.check_output(magickPath + " \"" + outputPath + "\" -fuzz 0 -fill none -opaque rgb(57,59,57)  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palettePath + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.width/2 - page.x] %[fx:page.height/2 - page.y]\" -write info: " + outputPath, shell=True))
     
     offset_file = open(get_offset_output_path(context, index), "w")
     offset_file.write(result[2:][:-1])
