@@ -10,7 +10,7 @@ The following programs are necessary:
 
 1. Copy the rct_graphics_helper folder (RCT Graphics Helper Addon/rct_graphics_helper) into the Blender addon folder.
 2. Open the sample scene (lighting_rig.blend).
-3. Enable RCT Graphics Heler in Blender's addon menu. 
+3. Enable RCT Graphics Helper in Blender's addon menu. 
 
 The Render tab should now contain 3 new panels.
 
