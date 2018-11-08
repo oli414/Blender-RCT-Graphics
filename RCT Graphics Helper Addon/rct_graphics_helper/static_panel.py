@@ -27,7 +27,9 @@ class RenderStatic(RCTRender, bpy.types.Operator):
         self.props = self.scene.rct_graphics_helper_static_properties
 
         self.renderTask = RenderTask(context.scene.rct_graphics_helper_general_properties.out_start_index, context)
-        self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], 0, False, 0, self.props.number_of_animation_frames)
+        
+        for i in range(self.props.number_of_rider_sets + 1):
+            self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], i, False, 0, self.props.number_of_animation_frames)
 
         return super(RenderStatic, self).execute(context)
         
@@ -41,6 +43,12 @@ class StaticProperties(bpy.types.PropertyGroup):
         description = "Number of viewing angles to render for",
         default = 4,
         min = 1)
+        
+    number_of_rider_sets = bpy.props.IntProperty(
+        name = "Rider Sets",
+        description = "Number of unqique sets of riders. Usually just the amount of riders for this vehicle. Some rides for example only expect rides in sets of 2 to lower the amount of required graphics. This is often done on vehicles which carry 4 or more riders.",
+        default = 0,
+        min = 0)
         
     number_of_animation_frames = bpy.props.IntProperty(
         name = "Animation Frames",
@@ -63,6 +71,9 @@ class StaticPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(properties, "viewing_angles")
+
+        row = layout.row()
+        row.prop(properties, "number_of_rider_sets")
         
         row = layout.row()
         row.prop(properties, "number_of_animation_frames")

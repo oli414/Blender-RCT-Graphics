@@ -171,7 +171,7 @@ class VehicleProperties(bpy.types.PropertyGroup):
     number_of_rider_sets = bpy.props.IntProperty(
         name = "Rider Sets",
         description = "Number of unqique sets of riders. Usually just the amount of riders for this vehicle. Some rides for example only expect rides in sets of 2 to lower the amount of required graphics. This is often done on vehicles which carry 4 or more riders.",
-        default = 2,
+        default = 0,
         min = 0)
         
     number_of_animation_frames = bpy.props.IntProperty(
