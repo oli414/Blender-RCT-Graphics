@@ -36,6 +36,7 @@ The Render tab should now contain 3 new panels.
 ## Output
 
 The images will be outputted to (by default) the output folder which is relative to the blender file. Offset files will be created along with the images.
+The output can then be used in a tool like [Krutonium's ObjectBuilderGUI](https://github.com/Krutonium/ObjectBuilderGUI).
 
 # Note
 
