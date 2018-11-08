@@ -93,7 +93,10 @@ class AngleSectionTask(object):
         angle = 0
         if frame[0]:
             angle = 45
-        angle += 360 / frame[1] * self.sub_index
+        if frame[1] == 2:
+            angle += 90 * self.sub_index
+        else:
+            angle += 360 / frame[1] * self.sub_index
 
         extra_roll = 0
         if self.inverted:
