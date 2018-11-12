@@ -11,6 +11,19 @@ import bpy
 import math
 import os
 
+def ToggleShadows(self, context):
+    shadow_caster = bpy.data.lamps['ShadowCasterLamp']
+    if shadow_caster is None:
+        return False
+    print(shadow_caster.shadow_method)
+    if self.cast_shadows:
+        shadow_caster.shadow_method = "RAY_SHADOW"
+        shadow_caster.use_diffuse = True
+    else:
+        shadow_caster.shadow_method = "NOSHADOW"
+        shadow_caster.use_diffuse = False
+    return
+
 class GeneralProperties(bpy.types.PropertyGroup):
     script_file = os.path.realpath(__file__)
     directory = os.path.dirname(script_file)
@@ -30,9 +43,15 @@ class GeneralProperties(bpy.types.PropertyGroup):
         
     number_of_animation_frames = bpy.props.IntProperty(
         name = "Animation Frames",
-        description = "Number of animation frames. For example in use for swinging, rotating or animated ride vehicles, animated rides, and animated scenery.",
+        description = "Number of animation frames. For example in use for swinging, rotating or animated ride vehicles, animated rides, and animated scenery",
         default = 1,
         min = 1)
+        
+    cast_shadows = bpy.props.BoolProperty(
+        name = "Cast Shadows",
+        description = "Control wether or not the render contains shadows. Should be disabled for vehicles",
+        default = False,
+        update = ToggleShadows)
         
     out_start_index = bpy.props.IntProperty(
         name = "Output Starting Index",
@@ -68,6 +87,9 @@ class VehiclesPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(properties, "number_of_animation_frames")
+        
+        row = layout.row()
+        row.prop(properties, "cast_shadows")
         
         row = layout.row()
         row.prop(properties, "out_start_index")
