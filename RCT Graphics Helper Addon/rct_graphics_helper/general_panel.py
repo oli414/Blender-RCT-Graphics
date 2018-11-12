@@ -12,6 +12,28 @@ import math
 import os
 
 class GeneralProperties(bpy.types.PropertyGroup):
+    script_file = os.path.realpath(__file__)
+    directory = os.path.dirname(script_file)
+    default_palette_path = directory + "\\res\\palette.gif"
+    palette_path = bpy.props.StringProperty(
+        name="Palette Path",
+        description="Palette to dither to",
+        maxlen= 1024,
+        subtype='FILE_PATH',
+        default= default_palette_path)
+
+    number_of_rider_sets = bpy.props.IntProperty(
+        name = "Rider Sets",
+        description = "Number of unqique sets of riders. Usually just the amount of peeps for this vehicle/ride. Some rides for example only expect peeps in sets of 2 to lower the amount of required graphics. This is often done on vehicles which carry 4 or more riders.",
+        default = 0,
+        min = 0)
+        
+    number_of_animation_frames = bpy.props.IntProperty(
+        name = "Animation Frames",
+        description = "Number of animation frames. For example in use for swinging, rotating or animated ride vehicles, animated rides, and animated scenery.",
+        default = 1,
+        min = 1)
+        
     out_start_index = bpy.props.IntProperty(
         name = "Output Starting Index",
         description = "Number to start counting from for the output file names",
@@ -38,6 +60,15 @@ class VehiclesPanel(bpy.types.Panel):
         scene = context.scene
         properties = scene.rct_graphics_helper_general_properties
 
+        row = layout.row()
+        row.prop(properties, "palette_path")
+        
+        row = layout.row()
+        row.prop(properties, "number_of_rider_sets")
+
+        row = layout.row()
+        row.prop(properties, "number_of_animation_frames")
+        
         row = layout.row()
         row.prop(properties, "out_start_index")
 

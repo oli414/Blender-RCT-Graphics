@@ -41,13 +41,11 @@ def rotate_rig(context, angle, verAngle=0, bankedAngle=0, midAngle=0):
         return True
 
 def post_render(context, index):
-    magickPath = "magick"
-    outputPath = get_output_path(context, index)
+    magick_path = "magick"
+    output_path = get_output_path(context, index)
 
-    script_file = os.path.realpath(__file__)
-    directory = os.path.dirname(script_file)
-    palettePath = directory + "\\res\\palette.gif"
-    result = str(subprocess.check_output(magickPath + " " + outputPath + " -fuzz 0 -fill none -opaque rgb(57,59,57)  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palettePath + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.x - page.width/2] %[fx:page.y - page.height/2]\" -write info: " + outputPath, shell=True))
+    palette_path = context.scene.rct_graphics_helper_general_properties.palette_path
+    result = str(subprocess.check_output(magick_path + " \"" + output_path + "\" -fuzz 0 -fill none -opaque rgb(57,59,57)  -quantize RGB -dither FloydSteinberg -define dither:diffusion-amount=30% -remap \"" + palette_path + "\" -colorspace sRGB -bordercolor none -border 1 -trim -format  \"%[fx:page.x - page.width/2] %[fx:page.y - page.height/2]\" -write info: \"" + output_path + "\"", shell=True))
     
     offset_file = open(get_offset_output_path(context, index), "w")
     offset_file.write(result[2:][:-1])

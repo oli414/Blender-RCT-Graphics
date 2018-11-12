@@ -37,9 +37,9 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
 
     def append_angles_to_rendertask(self, render_layer, inverted):
         start_anim = 0
-        if self.props.number_of_animation_frames != 1:
+        if self.scene.rct_graphics_helper_general_properties.number_of_animation_frames != 1:
             start_anim = 4
-        anim_count = self.props.number_of_animation_frames
+        anim_count = self.scene.rct_graphics_helper_general_properties.number_of_animation_frames
         for i in range(len(track_angle_sections_names)):
             key = track_angle_sections_names[i]
             track_section = track_angle_sections[key]
@@ -70,7 +70,7 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
         self.renderTask = RenderTask(context.scene.rct_graphics_helper_general_properties.out_start_index, context)
 
 
-        for i in range(self.props.number_of_rider_sets + 1):
+        for i in range(context.scene.rct_graphics_helper_general_properties.number_of_rider_sets + 1):
             self.append_angles_to_rendertask(i, False)
 
             if self.props.inverted_set:
@@ -160,25 +160,13 @@ class VehicleProperties(bpy.types.PropertyGroup):
 
     restraint_animation = bpy.props.BoolProperty(
         name = "Restraint Animation",
-        description = "Render restraint animation",
+        description = "Render with restraint animation. The restrain animation is 3 frames long and starts at frame 1",
         default = False)
         
     inverted_set = bpy.props.BoolProperty(
         name = "Inverted Set",
         description = "Used for rides which can invert for an extended amount of time like the flying and lay-down rollercoasters",
         default = False)
-        
-    number_of_rider_sets = bpy.props.IntProperty(
-        name = "Rider Sets",
-        description = "Number of unqique sets of riders. Usually just the amount of riders for this vehicle. Some rides for example only expect rides in sets of 2 to lower the amount of required graphics. This is often done on vehicles which carry 4 or more riders.",
-        default = 0,
-        min = 0)
-        
-    number_of_animation_frames = bpy.props.IntProperty(
-        name = "Animation Frames",
-        description = "Number of animation frames. For example in use for swinging, rotating or animated ride vehicles.",
-        default = 1,
-        min = 1)
 
 class VehiclesPanel(bpy.types.Panel):
     bl_label = "RCT Vehicles"
@@ -209,12 +197,6 @@ class VehiclesPanel(bpy.types.Panel):
         
         row = layout.row()
         row.prop(properties, "inverted_set")
-
-        row = layout.row()
-        row.prop(properties, "number_of_rider_sets")
-
-        row = layout.row()
-        row.prop(properties, "number_of_animation_frames")
 
         row = layout.row()
         row.operator("render.rct_vehicle", text = "Render Vehicle")
