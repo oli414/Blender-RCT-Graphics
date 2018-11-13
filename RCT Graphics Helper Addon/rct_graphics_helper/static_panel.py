@@ -29,7 +29,7 @@ class RenderStatic(RCTRender, bpy.types.Operator):
         self.renderTask = RenderTask(context.scene.rct_graphics_helper_general_properties.out_start_index, context)
         
         for i in range(context.scene.rct_graphics_helper_general_properties.number_of_rider_sets + 1):
-            self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], i, False, 0, context.scene.rct_graphics_helper_general_properties.number_of_animation_frames)
+            self.renderTask.add([[ False, context.scene.rct_graphics_helper_static_properties.viewing_angles, 0, 0, 0 ]], i, False, 0, context.scene.rct_graphics_helper_general_properties.number_of_animation_frames, self.props.object_width, self.props.object_length)
 
         return super(RenderStatic, self).execute(context)
         
@@ -42,6 +42,17 @@ class StaticProperties(bpy.types.PropertyGroup):
         name = "Viewing Angles",
         description = "Number of viewing angles to render for",
         default = 4,
+        min = 1)
+        
+    object_width = bpy.props.IntProperty(
+        name = "Object Width",
+        description = "Width of the object in tiles. Only used for large scenery",
+        default = 1,
+        min = 1)
+    object_length = bpy.props.IntProperty(
+        name = "Object Length",
+        description = "Length of the object in tiles. Only used for large scenery",
+        default = 1,
         min = 1)
 
     
@@ -59,6 +70,10 @@ class StaticPanel(bpy.types.Panel):
 
         row = layout.row()
         row.prop(properties, "viewing_angles")
+        
+        row = layout.row()
+        row.prop(properties, "object_width")
+        row.prop(properties, "object_length")
         
         row = layout.row()
         row.operator("render.rct_static", text = "Render Static Object")
