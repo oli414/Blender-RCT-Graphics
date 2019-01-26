@@ -20,6 +20,8 @@ The Render tab should now contain 3 new panels.
 2. Import or create your model centered on the world's origin.
 3. Go into to render tab.
 
+Please check the [guidelines](https://github.com/oli414/Blender-RCT-Graphics/wiki/Guidelines) for the best results.
+
 ## Static Objects and Rides
 
 4. Set the number of viewing angles in the "RCT Static" panel, for a standard scenery object this would be 4.
