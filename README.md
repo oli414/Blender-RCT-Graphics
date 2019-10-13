@@ -4,7 +4,7 @@
 The following programs are necessary:
 
 - ImageMagick (7.0.8-6 or higher)
-- Blender (recent version)
+- Blender (2.79)
 
 # Installing
 
