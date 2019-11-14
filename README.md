@@ -42,4 +42,5 @@ The output can then be used in a tool like [Krutonium's ObjectBuilderGUI](https:
 
 # Note
 
-The textures distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
+* The textures distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
+* (OpenGraphics)[https://github.com/OpenRCT2/OpenGraphics] A project to create free replacements for the graphics in open source re-implementation of RollerCoaster Tycoon 2.
