@@ -40,6 +40,7 @@ Please check the [guidelines](https://github.com/oli414/Blender-RCT-Graphics/wik
 The images will be outputted to (by default) the output folder which is relative to the blender file. Offset files will be created along with the images.
 The output can then be used in a tool like [Krutonium's ObjectBuilderGUI](https://github.com/Krutonium/ObjectBuilderGUI).
 
-# Note
+# Notes
 
-The textures distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
+* The textures distributed with the sample models are licensed under public domain and were taken from: https://opengameart.org/
+* [OpenGraphics](https://github.com/OpenRCT2/OpenGraphics) A project to create free replacements for the graphics in open source re-implementation of RollerCoaster Tycoon 2.
