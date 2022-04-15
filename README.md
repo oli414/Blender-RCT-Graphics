@@ -1,3 +1,8 @@
+**RCT Graphics Helper is an add-on for Blender 2.79 that aids the creation of sprites that match the graphical style of Rollercoaster Tycoon.**
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/2348094/163599017-243ab3a5-5567-4cd2-91d5-565b0cc86e63.png">
+</p>
 
 # Prerequisites
 
@@ -29,3 +34,33 @@ Please check the [guidelines](https://github.com/oli414/Blender-RCT-Graphics/wik
 # Documentation
 
 [Check out our wiki](https://github.com/oli414/Blender-RCT-Graphics/wiki/Documentation) for more in-depth details on all the available options.
+
+# Notes
+
+**Lighting**
+
+The lighting intensity of the three light sources (dome, filler and main) are not yet final, an may be tweaked in the future for better results. 
+
+**Primary Remap**
+
+The primary remap relies on the orange color group defined by OpenRCT2. This color group is suboptimal for dithering as the range (low to high) is drastically different from the color groups defined by the original game.
+
+This in practice means that the primary remap may turn out darker then expected. This will be fixed with a future update.
+
+**Animated Materials**
+
+Animated colors, like the water colors, or the chainlift colors from the palette are not yet properly implemented.
+
+**Column based Multi-Iile Objects**
+
+Multi-tile objects can currently only render sprites for each tile. The game more commonly relies on splitting a large sprite into several columns rather then splitting it per tile. This is not yet supported.
+
+**Render Times**
+
+The rendering times can be a bit high as the plugin relies on a lot of post processing, which accounts for about 2 thirds of the total processing time.
+The add-on does not yet utilize parallelization, but this will likely make the add-on much faster.
+
+**Why Blender 2.79?**
+
+As of Blender 2.8, Blender removed "Blender Render", a scanline renderer. This renderer is the closest thing we had in Blender to what was used for the graphics seen in the Rollercoaster Tycoon games.
+In Blender 2.8 the alternatives are Cycles and Eevee, but sadly I found these renderers too sophesticated and true to life to mimmick renders from ~1998 rendering software.
