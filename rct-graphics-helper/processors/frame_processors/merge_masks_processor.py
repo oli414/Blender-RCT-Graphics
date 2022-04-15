@@ -41,7 +41,7 @@ class MergeMasksProcessor(FrameProcessor):
 
             if frame.use_anti_aliasing:
                 merged_tile_indices = MagickCommand(tile_index_aa_meta_output)
-                merged_tile_indices.combine("mpr:ti_naa")
+                merged_tile_indices.combine(tile_indices)
 
                 tile_indices = merged_tile_indices
 

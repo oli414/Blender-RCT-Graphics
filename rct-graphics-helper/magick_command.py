@@ -26,7 +26,7 @@ class MagickCommand(object):
     # Quantizes the image using a palette
     def quantize(self, palette, amount):
         self.full_command += " -dither FloydSteinberg -define dither:diffusion-amount=" + str(amount) + "% -remap " + \
-            self.__stringify_input(palette) + " -colorspace sRGB"
+            self.__stringify_input(palette) + " -depth 16"
 
     # Trims the image to the smallest possible size and outputs the offset difference
     def trim(self):
@@ -76,6 +76,9 @@ class MagickCommand(object):
         self.full_command = "( " + self.full_command + \
             " ) ( " + \
             mask + " ) -compose CopyOpacity -composite"
+
+    def set_bit_depth(self, depth):
+        self.full_command += " -depth " + str(depth)
 
     # Gets the cli command to perform the ImageMagick operation
 

@@ -98,7 +98,7 @@ class SceneBuilder:
     def create_main_light(self, context):
         lamp_data = self.create_lamp_data(context, "MainLight", "SUN")
 
-        lamp_data.energy = 1.2
+        lamp_data.energy = 1.5
         lamp_data.use_specular = True
         lamp_data.use_diffuse = True
         lamp_data.shadow_method = "RAY_SHADOW"
