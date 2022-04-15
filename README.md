@@ -34,3 +34,23 @@ Please check the [guidelines](https://github.com/oli414/Blender-RCT-Graphics/wik
 # Documentation
 
 [Check out our wiki](https://github.com/oli414/Blender-RCT-Graphics/wiki/Documentation) for more in-depth details on all the available options.
+
+# Notes
+
+**Animated Materials**
+
+Animated colors, like the water colors, or the chainlift colors from the palette are not yet properly implemented.
+
+**Column based Multi-Iile Objects**
+
+Multi-tile objects can currently only render sprites for each tile. The game more commonly relies on splitting a large sprite into several columns rather then splitting it per tile. This is not yet supported.
+
+**Render Times**
+
+The rendering times can be a bit high as the plugin relies on a lot of post processing, which accounts for about 2 thirds of the total processing time.
+The add-on does not yet utilize parallelization, but this will likely make the add-on much faster.
+
+**Why Blender 2.79?**
+
+As of Blender 2.8, Blender removed "Blender Render", a scanline renderer. This renderer is the closest thing we had in Blender to what was used for the graphics seen in the Rollercoaster Tycoon games.
+In Blender 2.8 the alternatives are Cycles and Eevee, but sadly I found these renderers too sophesticated and true to life to mimmick renders from ~1998 rendering software.
