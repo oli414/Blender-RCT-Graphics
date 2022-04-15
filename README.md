@@ -1,4 +1,4 @@
-RCT Graphics Helper is an add-on for Blender 2.79 that aids the creation of sprites that match the graphical style of Rollercoaster Tycoon.
+**RCT Graphics Helper is an add-on for Blender 2.79 that aids the creation of sprites that match the graphical style of Rollercoaster Tycoon.**
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/2348094/163599017-243ab3a5-5567-4cd2-91d5-565b0cc86e63.png">
