@@ -11,8 +11,9 @@ The following programs are necessary:
 1. Download the [latest release](https://github.com/oli414/Blender-RCT-Graphics/releases) of the RCT Graphics Helper Blender add-on.
 2. In Blender, click on File > User Preferences > Add-ons > "Install Add-on from File..."
 3. In the file explorer window, select the downloaded RCT Graphics Helper zip file.
-4. The plugin should now show up in the list of add-ons as "RCT Graphics Helper"
+4. Enable the add-on by clicking the checkbox to the left of "RendeR: RCT Graphics Helper"
 5. Expand the RCT Graphics Helper add-on settings, and set the "OpenRCT2 Object Folder" path to the location of the /openrct2/object folder.
+6. Click "Save User Settings".
 
 # Usage
 
