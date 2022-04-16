@@ -38,6 +38,7 @@ palette_colors = [
     "animated_water_sparkle",
     "animated_chain",
     "recolor_1",
+    "recolor_1_orct2",
     "transparent",
 ]
 
@@ -164,6 +165,11 @@ palette_colors_details = {
         "default": False
     },
     "recolor_1": {
+        "title": "Recolor 1 Clover",
+        "Description": "Clover green used by RCT Graphics Helper",
+        "default": False
+    },
+    "recolor_1_orct2": {
         "title": "Recolor 1 Orange",
         "Description": "Orange used by OpenRCT2 to import recolor 1",
         "default": False
@@ -230,10 +236,8 @@ class Palette:
 
         cmd.as_montage(color_paths)
 
-        print(cmd.get_command_string(
-            renderer.magick_path, output_path))
         subprocess.check_output(cmd.get_command_string(
-            renderer.magick_path, output_path), shell=True)
+            renderer.magick_path, "PNG8:" + output_path), shell=True)
 
         self.path = output_path
         self.generated = True

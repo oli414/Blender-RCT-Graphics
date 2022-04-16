@@ -1,4 +1,7 @@
 # Class for building magick commands
+import os
+
+
 class MagickCommand(object):
     full_command = ""
 
@@ -49,6 +52,10 @@ class MagickCommand(object):
             color + "\" -fill \"#ffffffff\" -opaque \"" + \
             color + "\""
 
+    # Replaces all instances of color with color2
+    def replace_color(self, color, color2):
+        self.full_command += " -fill " + color2 + " -opaque " + color
+
     # Mixes between the current source, and source B given a mask
     def mask_mix(self, sourceB, mask):
         self.full_command = "( " + self.full_command + " ) " + \
@@ -90,7 +97,10 @@ class MagickCommand(object):
     def get_command_string(self, magick_path, output):
         if self.use_repage:
             self.full_command = self.full_command + " +repage"
-        return magick_path + " " + self.full_command + " \"" + output + "\""
+        final_command = magick_path + " " + self.full_command + " \"" + output + "\""
+        if os.name == "posix":
+            final_command = final_command.replace("(", "\(").replace(")", "\)")
+        return final_command
 
     def __stringify_input(self, input):
         if type(input) is str:

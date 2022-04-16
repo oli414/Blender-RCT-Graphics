@@ -39,13 +39,7 @@ Please check the [guidelines](https://github.com/oli414/Blender-RCT-Graphics/wik
 
 **Lighting**
 
-The lighting intensity of the three light sources (dome, filler and main) are not yet final, an may be tweaked in the future for better results. 
-
-**Primary Remap**
-
-The primary remap relies on the orange color group defined by OpenRCT2. This color group is suboptimal for dithering as the range (low to high) is drastically different from the color groups defined by the original game.
-
-This in practice means that the primary remap may turn out darker then expected. This will be fixed with a future update.
+The lighting intensity of the three light sources (dome, filler and main) are not yet final, an may be tweaked in the future for better results.
 
 **Animated Materials**
 

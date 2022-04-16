@@ -58,6 +58,12 @@ recolor_1_palette = Palette(os.path.join(
     "transparent"
 ])
 
+recolor_1_orct2_palette = Palette(os.path.join(
+    palette_base_path, "recolor_1_orct2_palette.png"), [
+    "recolor_1_orct2",
+    "transparent"
+])
+
 recolor_2_palette = Palette(os.path.join(
     palette_base_path, "recolor_2_palette.png"), [
     "magenta",
@@ -82,6 +88,12 @@ class PaletteManager:
     def __init__(self):
         self.recolor_palettes = [
             recolor_1_palette,
+            recolor_2_palette,
+            recolor_3_palette
+        ]
+
+        self.orct2_recolor_palettes = [
+            recolor_1_orct2_palette,
             recolor_2_palette,
             recolor_3_palette
         ]
@@ -113,6 +125,10 @@ class PaletteManager:
     # Gets the recolor palette for the specified recolor index
     def get_recolor_palette(self, recolor_index):
         return self.recolor_palettes[recolor_index]
+
+    # Gets the recolor palette for the specified recolor index that is used by ORCT2
+    def get_orct2_recolor_palette(self, recolor_index):
+        return self.orct2_recolor_palettes[recolor_index]
 
     # Gets the rider palette
     def get_rider_palette(self):

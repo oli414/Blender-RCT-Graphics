@@ -84,7 +84,7 @@ class RenderTaskProcessor:
 
             self._proceed_task_process_context(task_process_context)
 
-            print("Progress: {}".format(
+            print("Progress: {}%".format(
                 round(self._get_progress(task_process_context) * 100)))
 
             # Exit this function if the sub process is async, the callback restarts it when the subprocess is ready
