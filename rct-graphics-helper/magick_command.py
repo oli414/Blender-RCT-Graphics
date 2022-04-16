@@ -21,12 +21,13 @@ class MagickCommand(object):
             delete_addition = "+delete "
             post = " " + self.__stringify_input(next_file)
         self.full_command = "( " + self.full_command + \
-            " -write mpr:" + id + " " + delete_addition + ")" + post
+            " -write mpr:" + id + \
+            " " + delete_addition + ")" + post
 
     # Quantizes the image using a palette
     def quantize(self, palette, amount):
         self.full_command += " -dither FloydSteinberg -define dither:diffusion-amount=" + str(amount) + "% -remap " + \
-            self.__stringify_input(palette) + " -depth 16"
+            self.__stringify_input(palette) + " -colorspace sRGB"
 
     # Trims the image to the smallest possible size and outputs the offset difference
     def trim(self):
@@ -45,7 +46,8 @@ class MagickCommand(object):
     def id_mask(self, r, g, b):
         color = "rgb(" + ",".join([str(r), str(g), str(b)]) + ")"
         self.full_command += " -fill \"#00000000\" +opaque \"" + \
-            color + "\" -fill \"#ffffffff\" -opaque \"" + color + "\""
+            color + "\" -fill \"#ffffffff\" -opaque \"" + \
+            color + "\""
 
     # Mixes between the current source, and source B given a mask
     def mask_mix(self, sourceB, mask):
@@ -79,6 +81,9 @@ class MagickCommand(object):
 
     def set_bit_depth(self, depth):
         self.full_command += " -depth " + str(depth)
+
+    def output(self, file):
+        self.full_command += " -write PNG8:" + file
 
     # Gets the cli command to perform the ImageMagick operation
 

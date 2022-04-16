@@ -230,6 +230,8 @@ class Palette:
 
         cmd.as_montage(color_paths)
 
+        print(cmd.get_command_string(
+            renderer.magick_path, output_path))
         subprocess.check_output(cmd.get_command_string(
             renderer.magick_path, output_path), shell=True)
 

@@ -48,7 +48,7 @@ class RenderTaskProcessor:
         ]
 
         self.prioritize_final_output = True
-        self.cleanup_afterwards = True
+        self.cleanup_afterwards = False
 
     def process(self, task, callback):
         def finalize():
