@@ -166,7 +166,7 @@ class PostProcessor(FrameProcessor):
 
         if result[2:][:-1] is not "":
             offset_coords = result[2:][:-1].split(" ")
-            output.offset_x = int(offset_coords[0])
-            output.offset_y = int(offset_coords[1]) + 15
+            output.offset_x = int(round(float(offset_coords[0])))
+            output.offset_y = int(round(float(offset_coords[1]))) + 15
 
         return output

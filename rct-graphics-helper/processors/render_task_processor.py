@@ -191,7 +191,7 @@ class RenderTaskProcessor:
                 image_dict["path"] = os.path.basename(output_info.path)
                 image_dict["x"] = output_info.offset_x
                 image_dict["y"] = output_info.offset_y
-                image_dict["format"] = "raw"
+                image_dict["format"] = "keep"
 
                 images[output_info.index] = image_dict
 
@@ -242,6 +242,9 @@ class RenderTaskProcessor:
                 file_path, "object.json"), "object.json")
 
             for image in info.get("images"):
+
+                if isinstance(image, str):
+                    continue
 
                 image_file = os.path.join(file_path, image.get("path"))
 
