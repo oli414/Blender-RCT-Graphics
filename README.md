@@ -8,7 +8,7 @@
 
 The following programs are necessary:
 
-- [ImageMagick](https://imagemagick.org/script/download.php) (7.0.8-6 or higher **No HDRI**) added to the Path variable as "Magick". For Windows install the "ImageMagick Q16 x64 static.exe" option.
+- [ImageMagick](https://imagemagick.org/script/download.php) (7.0.8-6 or higher. X16 X64 **Without** HDRI) added to the Path variable as "Magick". For Windows install the "ImageMagick Q16 x64 static.exe" option.
 - [Blender (2.79)](https://download.blender.org/release/Blender2.79/)
 
 # Installing
