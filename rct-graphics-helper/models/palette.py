@@ -237,7 +237,7 @@ class Palette:
         cmd.as_montage(color_paths)
 
         subprocess.check_output(cmd.get_command_string(
-            renderer.magick_path, "PNG8:" + output_path), shell=True)
+            renderer.magick_path, output_path), shell=True)
 
         self.path = output_path
         self.generated = True

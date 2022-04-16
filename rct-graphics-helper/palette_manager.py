@@ -15,7 +15,7 @@ import math
 from .models.palette import Palette, palette_base_path
 
 default_full_palette = Palette(os.path.join(
-    palette_base_path, "default_full_palette.png"), [
+    palette_base_path, "default_full_palette.bmp"), [
     "black",
     "gray",
     "lavender_purple",
@@ -40,44 +40,44 @@ default_full_palette = Palette(os.path.join(
 ])
 
 default_vehicle_palette = Palette(os.path.join(
-    palette_base_path, "default_vehicle_palette.png"), [
+    palette_base_path, "default_vehicle_palette.bmp"), [
     "black",
     "gray",
     "transparent"
 ])
 
-rider_palette = Palette(os.path.join(palette_base_path, "peep_palette.png"), [
+rider_palette = Palette(os.path.join(palette_base_path, "peep_palette.bmp"), [
     "black",
     "salmon",
     "transparent"
 ])
 
 recolor_1_palette = Palette(os.path.join(
-    palette_base_path, "recolor_1_palette.png"), [
+    palette_base_path, "recolor_1_palette.bmp"), [
     "recolor_1",
     "transparent"
 ])
 
 recolor_1_orct2_palette = Palette(os.path.join(
-    palette_base_path, "recolor_1_orct2_palette.png"), [
+    palette_base_path, "recolor_1_orct2_palette.bmp"), [
     "recolor_1_orct2",
     "transparent"
 ])
 
 recolor_2_palette = Palette(os.path.join(
-    palette_base_path, "recolor_2_palette.png"), [
+    palette_base_path, "recolor_2_palette.bmp"), [
     "magenta",
     "transparent"
 ])
 
 recolor_3_palette = Palette(os.path.join(
-    palette_base_path, "recolor_3_palette.png"), [
+    palette_base_path, "recolor_3_palette.bmp"), [
     "yellow",
     "transparent"
 ])
 
 custom_palette = Palette(os.path.join(
-    palette_base_path, "custom_palette.png"), [
+    palette_base_path, "custom_palette.bmp"), [
     "yellow",
 ])
 

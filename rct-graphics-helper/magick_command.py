@@ -12,9 +12,9 @@ class MagickCommand(object):
     # Replaces the command with a montage command for generating spritesheets
     def as_montage(self, inputs):
         self.use_repage = False
-        self.full_command = "montage \"" + \
+        self.full_command = "\"" + \
             "\" \"".join(inputs) + \
-            "\" -tile x1 -geometry +0+0 -background none"
+            "\" +append -background none"
 
     # Writes the current result to the MPR for reuse in the same command. The cached result can be referenced using mpr:{id}
     def write_to_cache(self, id, delete_previous=False, next_file=""):
