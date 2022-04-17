@@ -83,7 +83,7 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
             if self.property_value("SLOPED_TURNS", props) and self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED", props):
                 return True
         elif key == "VEHICLE_SPRITE_FLAG_DIAGONAL_GENTLE_SLOPE_BANKED_TRANSITIONS":
-            if self.property_value("SLOPED_TURNS", props) and self.property_value("VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPES", props):
+            if self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED", props) and self.property_value("VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPES", props):
                 return True
         elif key == "VEHICLE_SPRITE_FLAG_FLAT_TO_GENTLE_SLOPE_BANKED_TRANSITIONS":
             if self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED", props) and self.property_value("VEHICLE_SPRITE_FLAG_GENTLE_SLOPES", props):
@@ -108,14 +108,14 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
                     if track_section[0]:
                         base_view_angle = 45
                     self.task_builder.set_rotation(
-                        base_view_angle, track_section[3] + extra_roll, track_section[2], track_section[4])
+                        base_view_angle, -track_section[3] - extra_roll, track_section[2], track_section[4])
 
                     if key == "VEHICLE_SPRITE_FLAG_RESTRAINT_ANIMATION":
                         for j in range(3):
                             for k in range(track_section[1]):
                                 for l in range(animation_frames):
                                     self.task_builder.set_rotation(
-                                        base_view_angle + k / track_section[1] * 360, track_section[3] + extra_roll, track_section[2], track_section[4])
+                                        base_view_angle + k / track_section[1] * 360, -track_section[3] - extra_roll, track_section[2], track_section[4])
                                     self.task_builder.add_viewing_angles(
                                         1, animation_frames + j, 1)
                     else:

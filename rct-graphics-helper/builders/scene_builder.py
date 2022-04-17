@@ -27,6 +27,7 @@ class SceneBuilder:
         rig_obj = self.create_scene_object(context, "Rig", None)
         rig_obj.location = (0, 0, 0)
         rig_obj.rotation_euler = (0, 0, math.radians(-45))
+        rig_obj.hide = True
         rig_obj.hide_select = True
 
         rig_obj.rotation_mode = "YXZ"
@@ -37,6 +38,7 @@ class SceneBuilder:
         vertical_joint_obj = self.create_scene_object(
             context, "VerticalJoint", None)
         vertical_joint_obj.location = (0, 0, 0)
+        vertical_joint_obj.hide = True
         vertical_joint_obj.hide_select = True
 
         scene.objects.link(vertical_joint_obj)

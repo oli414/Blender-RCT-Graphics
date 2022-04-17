@@ -48,7 +48,7 @@ class RenderTaskProcessor:
         ]
 
         self.prioritize_final_output = True
-        self.cleanup_afterwards = False
+        self.cleanup_afterwards = True
 
     def process(self, task, callback):
         def finalize():
@@ -207,7 +207,7 @@ class RenderTaskProcessor:
         if not os.path.exists(file_path):
             return None
 
-        with open(file_path, "r+") as object_file:
+        with open(file_path, mode="r+", encoding="utf-8") as object_file:
             data = json.loads(object_file.read(),
                               object_pairs_hook=OrderedDict)
 
@@ -216,7 +216,7 @@ class RenderTaskProcessor:
             object_file.seek(0)
             object_file.truncate()
 
-            object_file.write(json.dumps(data, indent=4))
+            object_file.write(json.dumps(data, indent=4, ensure_ascii=False))
             object_file.close()
 
             if data.get("id") == None:
