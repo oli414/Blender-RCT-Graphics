@@ -70,6 +70,13 @@ class SceneBuilder:
         scene.objects.link(dome_light_obj)
         dome_light_obj.parent = vertical_joint_obj
 
+        # Environment lighting
+        bpy.data.worlds["World"].light_settings.use_environment_light = True
+        bpy.data.worlds["World"].light_settings.environment_energy = 0.15
+        bpy.data.worlds["World"].light_settings.gather_method = "RAYTRACE"
+        bpy.data.worlds["World"].light_settings.distance = 0
+        bpy.data.worlds["World"].light_settings.samples = 1
+
     def create_camera(self, context):
         name = self.prefix + "Camera" + self.suffix
         if name in bpy.data.cameras:
@@ -124,10 +131,7 @@ class SceneBuilder:
         lamp_data.energy = 0.5
         lamp_data.use_specular = False
         lamp_data.use_diffuse = True
-        lamp_data.shadow_method = "RAY_SHADOW"
-        lamp_data.shadow_ray_sample_method = "ADAPTIVE_QMC"
-        lamp_data.shadow_ray_samples = 2
-        lamp_data.shadow_soft_size = 0.5
+        lamp_data.shadow_method = "NOSHADOW"
 
         lamp_object = self.create_scene_object(
             context, 'FillerLight', lamp_data)
@@ -142,7 +146,7 @@ class SceneBuilder:
 
     def create_light_dome(self, context):
         lamp_data = self.create_lamp_data(context, "LightDome", "HEMI")
-        lamp_data.energy = 0.3
+        lamp_data.energy = 0.1
         lamp_data.use_specular = False
 
         lamp_object = self.create_scene_object(context, 'LightDome', lamp_data)

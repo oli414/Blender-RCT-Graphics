@@ -39,7 +39,7 @@ class Init(bpy.types.Operator):
         # Anti-aliasing
         context.scene.render.use_antialiasing = True
         context.scene.render.pixel_filter_type = "BOX"
-        context.scene.render.antialiasing_samples = "8"
+        context.scene.render.antialiasing_samples = "5"
         context.scene.render.filter_size = 1.4
 
         # Create render layers

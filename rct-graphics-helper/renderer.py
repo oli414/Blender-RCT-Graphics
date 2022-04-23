@@ -38,7 +38,7 @@ class Renderer:
         self.context = context
 
         self.magick_path = "magick"
-        self.floyd_steinberg_diffusion = 0
+        self.floyd_steinberg_diffusion = 5
 
         self.palette_manager = palette_manager
 
@@ -51,7 +51,8 @@ class Renderer:
         if self.world_position_material == None:
             materials_builder = MaterialsBuilder()
             materials_builder.create_world_position_material(context)
-            self.world_position_material = find_material_by_name("WorldPosition")
+            self.world_position_material = find_material_by_name(
+                "WorldPosition")
 
         self.lens_shift_y_offset = round(bpy.data.cameras["Camera"].shift_y *
                                          context.scene.render.resolution_x)
