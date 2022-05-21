@@ -7,16 +7,14 @@ Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
 RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
-from .frame_processor import FrameProcessor
+from ..sub_processor import SubProcessor
 
 # Frame processor for rendering the scene
 
 
-class RenderProcessor(FrameProcessor):
+class RenderProcessor(SubProcessor):
     def __init__(self, renderer):
         super().__init__()
-
-        self.is_async = False
 
         self.renderer = renderer
 

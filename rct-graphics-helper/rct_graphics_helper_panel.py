@@ -15,6 +15,8 @@ from .operators.init_operator import Init
 
 from .operators.vehicle_render_operator import RenderVehicle
 
+from .operators.walls_render_operator import RenderWalls
+
 from .operators.render_tiles_operator import RenderTiles
 
 from .models.palette import palette_colors, palette_colors_details
@@ -111,19 +113,26 @@ class GraphicsHelperPanel(bpy.types.Panel):
             self.draw_tiles_panel(scene, box)
         elif properties.render_mode == "VEHICLE":
             self.draw_vehicle_panel(scene, box)
+        elif properties.render_mode == "WALLS":
+            self.draw_walls_panel(scene, box)
 
         row = layout.row()
-        row.prop(properties, "write_to_object_descriptor")
+        row.prop(properties, "build_gx")
 
-        if properties.write_to_object_descriptor:
+        if properties.build_gx:
             box = layout.box()
+            box.prop(properties, "build_assetpack")
 
-            row = box.row()
-            row.prop(properties, "build_parkobj")
+            if properties.build_assetpack:
+                box2 = box.box()
+                box2.prop(properties, "copy_assetpack_to_orct2")
 
-            if properties.build_parkobj:
-                row = box.row()
-                row.prop(properties, "copy_parkobj_to_orct2")
+        row = layout.row()
+        row.prop(properties, "build_parkobj")
+
+        if properties.build_parkobj:
+            box = layout.box()
+            box.prop(properties, "copy_parkobj_to_orct2")
 
     def draw_tiles_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_static_properties
@@ -137,11 +146,29 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row.prop(properties, "object_length")
 
         row = layout.row()
-
         text = "Render"
         if general_properties.rendering:
-            text = "Processing..."
+            text = "Failed"
         row.operator("render.rct_static", text=text)
+
+    def draw_walls_panel(self, scene, layout):
+        properties = scene.rct_graphics_helper_walls_properties
+        general_properties = scene.rct_graphics_helper_general_properties
+
+        row = layout.row()
+        row.prop(properties, "sloped")
+
+        row = layout.row()
+        row.prop(properties, "double_sided")
+
+        row = layout.row()
+        row.prop(properties, "doorway")
+
+        row = layout.row()
+        text = "Render"
+        if general_properties.rendering:
+            text = "Failed"
+        row.operator("render.rct_walls", text=text)
 
     def draw_vehicle_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_vehicle_properties
@@ -169,5 +196,5 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row = layout.row()
         text = "Render"
         if general_properties.rendering:
-            text = "Processing..."
+            text = "Failed"
         row.operator("render.rct_vehicle", text=text)

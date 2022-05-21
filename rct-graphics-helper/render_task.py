@@ -23,7 +23,7 @@ class RenderTask:
         return os.path.join(self.get_output_folder(), ".temp")
 
     def get_output_folder(self):
-        return bpy.path.abspath(self.context.scene.rct_graphics_helper_general_properties.output_directory)
+        return os.path.join(bpy.path.abspath(self.context.scene.rct_graphics_helper_general_properties.output_directory))
 
     def add_frame(self, frame):
         self.frames.append(frame)

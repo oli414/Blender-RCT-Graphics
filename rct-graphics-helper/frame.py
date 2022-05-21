@@ -35,9 +35,14 @@ class Frame:
 
         self.animation_frame_index = 0
 
+        self.occlusion_layers = 0
+
         self.use_anti_aliasing = True
         self.anti_alias_with_background = False
         self.maintain_aliased_silhouette = True
+
+        self.offset_x = 0
+        self.offset_y = 0
 
         self.base_palette = None
 
@@ -62,14 +67,14 @@ class Frame:
         return os.path.join(self.task.get_temporary_output_folder(), "quantized_{}.png".format(self.frame_index))
 
     def get_final_output_paths(self):
-        if self.oversized:
+        if self.oversized or self.occlusion_layers > 0:
             output_paths = []
             for output_index in self.output_indices:
                 output_paths.append(os.path.join(
-                    self.task.get_output_folder(), "sprite_{}.png".format(output_index)))
+                    self.task.get_output_folder(), "sprites", "sprite_{}.png".format(output_index)))
             return output_paths
         else:
-            return [os.path.join(self.task.get_output_folder(), "sprite_{}.png".format(self.frame_index))]
+            return [os.path.join(self.task.get_output_folder(), "sprites", "sprite_{}.png".format(self.frame_index))]
 
     def prepare_scene(self):
         object = bpy.data.objects['Rig']
@@ -90,6 +95,10 @@ class Frame:
         self.maintain_aliased_silhouette = ((
             not anti_alias_with_background) or maintain_aliased_silhouette) and use_anti_aliasing
 
+    def set_offset(self, offset_x, offset_y):
+        self.offset_x = offset_x
+        self.offset_y = offset_y
+
     def set_multi_tile_size(self, width, length):
         self.width = width
         self.length = length
@@ -105,9 +114,15 @@ class Frame:
     def set_base_palette(self, palette):
         self.base_palette = palette
 
+    def set_occlusion_layers(self, layers):
+        self.occlusion_layers = layers
+
     def set_output_indices(self, indices):
         self.output_indices = indices
 
-        if len(self.output_indices) != self.width * self.length:
+        layers = self.occlusion_layers
+        if layers == 0:
+            layers = 1
+        if len(self.output_indices) != self.width * self.length * layers:
             raise Exception(
-                "The number of output indices does not match the number of expected output sprites for this frame's tile footprint")
+                "The number of output indices does not match the number of expected output sprites for this frame")

@@ -121,38 +121,3 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
                     else:
                         self.task_builder.add_viewing_angles(
                             track_section[1], 0, animation_frames)
-
-    def OLD_append_angles_to_rendertask(self, render_layer, inverted):
-        start_anim = 0
-        """
-        if self.scene.rct_graphics_helper_general_properties.number_of_animation_frames != 1:
-            start_anim = 4
-        anim_count = self.scene.rct_graphics_helper_general_properties.number_of_animation_frames
-        for i in range(len(track_angle_sections_names)):
-            key = track_angle_sections_names[i]
-            track_section = track_angle_sections[key]
-            if self.key_is_property(key):
-                if self.property_value(key):
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, start_anim, anim_count)
-            elif key == "VEHICLE_SPRITE_FLAG_GENTLE_SLOPE_BANKED_TURNS" or key == "VEHICLE_SPRITE_FLAG_GENTLE_SLOPE_BANKED_TRANSITIONS":
-                if self.property_value("SLOPED_TURNS"):
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, start_anim, anim_count)
-            elif key == "VEHICLE_SPRITE_FLAG_FLAT_TO_GENTLE_SLOPE_WHILE_BANKED_TRANSITIONS":
-                if self.property_value("SLOPED_TURNS") and self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED"):
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, start_anim, anim_count)
-            elif key == "VEHICLE_SPRITE_FLAG_DIAGONAL_GENTLE_SLOPE_BANKED_TRANSITIONS":
-                if self.property_value("SLOPED_TURNS") and self.property_value("VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPES"):
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, start_anim, anim_count)
-            elif key == "VEHICLE_SPRITE_FLAG_FLAT_TO_GENTLE_SLOPE_BANKED_TRANSITIONS":
-                if self.property_value("VEHICLE_SPRITE_FLAG_FLAT_BANKED") and self.property_value("VEHICLE_SPRITE_FLAG_GENTLE_SLOPES"):
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, start_anim, anim_count)
-            elif key == "VEHICLE_SPRITE_FLAG_RESTRAINT_ANIMATION" and inverted == False:
-                if self.props.restraint_animation:
-                    self.renderTask.add(
-                        track_section, render_layer, inverted, 1, 3)
-        """

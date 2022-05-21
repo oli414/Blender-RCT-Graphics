@@ -55,6 +55,9 @@ class RCTRender(object):
         bpy.data.cameras["Camera"].ortho_scale = 169.72 / \
             (1920 / context.scene.render.resolution_x)
 
+        bpy.data.cameras["Camera"].shift_x = -0.000345 * \
+            96 / context.scene.render.resolution_x
+
         def finish():
             general_props.rendering = False
             rotate_rig(0, 0, 0, 0)

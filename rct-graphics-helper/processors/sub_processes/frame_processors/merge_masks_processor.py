@@ -8,13 +8,13 @@ RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
 import subprocess
-from ...magick_command import MagickCommand
-from .frame_processor import FrameProcessor
+from ....magick_command import MagickCommand
+from ..sub_processor import SubProcessor
 
 # Frame processor for merging the tile index meta images with the material index meta image
 
 
-class MergeMasksProcessor(FrameProcessor):
+class MergeMasksProcessor(SubProcessor):
     def __init__(self, renderer):
         super().__init__()
 
@@ -33,7 +33,7 @@ class MergeMasksProcessor(FrameProcessor):
 
         material_indices = MagickCommand(main_meta_input)
 
-        material_indices.nullify_channels(["Green", "Blue"])
+        material_indices.nullify_channels(["Green"])
 
         if frame.oversized:
             tile_indices = MagickCommand(tile_index_naa_meta_output)

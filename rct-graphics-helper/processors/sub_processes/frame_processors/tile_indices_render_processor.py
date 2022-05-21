@@ -7,12 +7,12 @@ Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
 RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
-from .frame_processor import FrameProcessor
+from ..sub_processor import SubProcessor
 
 # Frame processor for rendering the scene with the world position material to generate the tile index meta image
 
 
-class TileIndicesRenderProcessor(FrameProcessor):
+class TileIndicesRenderProcessor(SubProcessor):
     def __init__(self, renderer, with_anti_aliasing):
         super().__init__()
 

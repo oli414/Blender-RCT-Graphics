@@ -9,9 +9,10 @@ RCT Graphics Helper is licensed under the GNU General Public License version 3.
 
 import os
 import subprocess
+from unicodedata import ucnhash_CAPI
 
-from ...magick_command import MagickCommand
-from .frame_processor import FrameProcessor
+from ....magick_command import MagickCommand
+from ..sub_processor import SubProcessor
 
 
 class Output:
@@ -24,7 +25,7 @@ class Output:
 # Frame processor for masking, dithering and cropping the final image
 
 
-class PostProcessor(FrameProcessor):
+class PostProcessor(SubProcessor):
     def __init__(self, renderer):
         super().__init__()
 
@@ -84,21 +85,51 @@ class PostProcessor(FrameProcessor):
             self._process_oversized(magick_command, frame)
 
     def _process_default(self, magick_command, frame):
-        magick_command.trim()
+        quantized_output_path = frame.get_quantized_render_output_path()
+        mask_path = frame.get_meta_render_output_path()
 
-        output_index = frame.output_indices[0]
-        output_path = frame.get_final_output_paths()[0]
+        if frame.occlusion_layers > 0:
+            # If we are using occlusion layers, then render each seperately.
+            result = str(subprocess.check_output(magick_command.get_command_string(
+                self.renderer.magick_path, quantized_output_path), shell=True))
 
-        result = str(subprocess.check_output(magick_command.get_command_string(
-            self.renderer.magick_path, output_path), shell=True))
+            magick_command = MagickCommand(quantized_output_path)
 
-        output_info = self._get_output_info_from_results(
-            result, output_index, output_path)
+        layers = frame.occlusion_layers
 
-        output_info.offset_y -= self.renderer.lens_shift_y_offset
-        output_info.offset_y += self.renderer.context.scene.rct_graphics_helper_general_properties.y_offset
+        if layers == 0:
+            layers = 1
 
-        frame.task.output_info.append(output_info)
+        layer_command = magick_command
+
+        for i in range(layers):
+            output_index = frame.output_indices[i]
+            output_path = frame.get_final_output_paths()[i]
+
+            if frame.occlusion_layers > 0:
+                layer_command = magick_command.clone()
+
+                # Mask the occlusion layer
+                mask = MagickCommand(mask_path)
+                mask.nullify_channels(["Red", "Green"])
+                mask.id_mask(0, 0, frame.occlusion_layers - i - 1)
+                layer_command.mask_mix_self(mask)
+
+            layer_command.trim()
+
+            result = str(subprocess.check_output(layer_command.get_command_string(
+                self.renderer.magick_path, output_path), shell=True))
+
+            output_info = self._get_output_info_from_results(
+                result, output_index, output_path)
+
+            output_info.offset_y -= self.renderer.lens_shift_y_offset
+            output_info.offset_y += self.renderer.context.scene.rct_graphics_helper_general_properties.y_offset
+
+            output_info.offset_x += frame.offset_x
+            output_info.offset_y += frame.offset_y
+
+            frame.task.output_info.append(output_info)
 
     def _process_oversized(self, magick_command, frame):
         quantized_output_path = frame.get_quantized_render_output_path()
@@ -154,6 +185,9 @@ class PostProcessor(FrameProcessor):
 
                 output_info.offset_y -= self.renderer.lens_shift_y_offset
                 output_info.offset_y += self.renderer.context.scene.rct_graphics_helper_general_properties.y_offset
+
+                output_info.offset_x += frame.offset_x
+                output_info.offset_y += frame.offset_y
 
                 output_infos.append(output_info)
 

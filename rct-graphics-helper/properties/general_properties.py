@@ -99,7 +99,9 @@ class GeneralProperties(bpy.types.PropertyGroup):
         items=(
             ("TILES", "Tile(s)", "Renders an object from in-game viewing angles. Has the ability for multi-tile rendering.", 1),
             ("VEHICLE", "Vehicle",
-             "Renders a vehicle from the necesssary angles given a set of track ability flags.", 2)
+             "Renders a vehicle from the necesssary angles given a set of track ability flags.", 2),
+            ("WALLS", "Walls",
+             "Renders a wall piece.", 3)
         )
     )
 
@@ -108,9 +110,19 @@ class GeneralProperties(bpy.types.PropertyGroup):
         description="Whether or not the RCT add-on is currently rendering.",
         default=False)
 
-    write_to_object_descriptor = bpy.props.BoolProperty(
-        name="Write to object.json",
-        description="Whether or not to write the image list to the object.json file in the output directory.",
+    build_gx = bpy.props.BoolProperty(
+        name="Generate GX (optimized sprite file)",
+        description="Whether or not to create a .dat sprite file.",
+        default=True)
+
+    build_assetpack = bpy.props.BoolProperty(
+        name="Generate the asset pack file",
+        description="Whether or not to the ORCT2 asset pack file",
+        default=True)
+
+    copy_assetpack_to_orct2 = bpy.props.BoolProperty(
+        name="Copy to OpenRCT2",
+        description="Copy the generated .graphics file to the ORCT2 assetpack folder.",
         default=False)
 
     build_parkobj = bpy.props.BoolProperty(

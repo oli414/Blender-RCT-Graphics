@@ -36,7 +36,7 @@ class MagickCommand(object):
     def trim(self):
         self.use_repage = True
         self.full_command += \
-            " -bordercolor none -compose Copy -border 1 -trim  -format \"%[fx:page.x - page.width/2] %[fx:page.y - page.height/2]\" -write info:"
+            " -bordercolor none -compose Copy -border 1 -trim  -format \"%[fx:page.x-page.width/2] %[fx:page.y-page.height/2]\" -write info:"
 
     # Sets a number of channels (Red, Green, Blue) to 0
     def nullify_channels(self, channels_to_nullify):
@@ -91,6 +91,12 @@ class MagickCommand(object):
 
     def output(self, file):
         self.full_command += " -write PNG8:" + file
+
+    def clone(self):
+        mc = MagickCommand("")
+        mc.full_command = self.full_command
+        mc.use_repage = self.use_repage
+        return mc
 
     # Gets the cli command to perform the ImageMagick operation
 

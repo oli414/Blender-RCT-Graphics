@@ -14,13 +14,21 @@ from bpy.types import AddonPreferences
 class RCTGraphicsHelperPreferences(AddonPreferences):
     bl_idname = "rct-graphics-helper"
 
-    orct2_object_directory = bpy.props.StringProperty(
-        name="OpenRCT2 Object Folder",
-        description="Directory to copy the .parkobj file to.",
+    orct2_directory = bpy.props.StringProperty(
+        name="OpenRCT2 Path",
+        description="The path to OpenRCT2. This should point to the directory that contains the object folder.",
+        maxlen=1024,
+        subtype='DIR_PATH',
+        default="")
+
+    opengraphics_directory = bpy.props.StringProperty(
+        name="OpenGraphics Repository Path",
+        description="Root directory for the OpenGraphics repository, if available.",
         maxlen=1024,
         subtype='DIR_PATH',
         default="")
 
     def draw(self, context):
         layout = self.layout
-        layout.prop(self, "orct2_object_directory")
+        layout.prop(self, "orct2_directory")
+        layout.prop(self, "opengraphics_directory")

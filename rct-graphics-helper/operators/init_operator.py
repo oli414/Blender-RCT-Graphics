@@ -89,6 +89,7 @@ class Init(bpy.types.Operator):
 
         layer.use_pass_combined = True
         layer.use_pass_material_index = True
+        layer.use_pass_object_index = True
         layer.use_zmask = True
 
         return layer

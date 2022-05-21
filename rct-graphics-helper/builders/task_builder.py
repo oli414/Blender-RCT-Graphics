@@ -40,10 +40,19 @@ class TaskBuilder:
 
         self.palette = None
 
+        self.offset_x = 0
+        self.offset_y = 0
+
+        self.occlusion_layers = 0
+
         self.task = RenderTask(None)
 
     def set_output_index(self, output_index):
         self.output_index = output_index
+
+    def set_offset(self, offset_x, offset_y):
+        self.offset_x = offset_x
+        self.offset_y = offset_y
 
     # Adds render angles for the given number of viewing angles relative to the currently configured rotation
     def add_viewing_angles(self, number_of_viewing_angles, animation_frame_index=0, animation_frames=1):
@@ -58,6 +67,8 @@ class TaskBuilder:
                               self.bank_angle, self.vertical_angle, self.mid_angle)
                 frame.set_multi_tile_size(self.width, self.length)
 
+                frame.set_offset(self.offset_x, self.offset_y)
+
                 frame.set_recolorables(self.recolorables)
 
                 frame.set_layer(self.layer)
@@ -69,6 +80,15 @@ class TaskBuilder:
 
                 frame.animation_frame_index = animation_frame_index + j
 
+                frame.set_occlusion_layers(self.occlusion_layers)
+
+                if self.occlusion_layers > 0:
+                    output_indices = []
+                    for k in range(self.occlusion_layers):
+                        output_indices.append(
+                            start_output_index + k * animation_frames * number_of_viewing_angles + j * number_of_viewing_angles + i)
+                    frame.set_output_indices(output_indices)
+
                 if frame.oversized:
                     output_indices = []
                     for k in range(frame.width * frame.length):
@@ -78,8 +98,12 @@ class TaskBuilder:
 
                 self.angles.append(frame)
 
-        self.output_index += number_of_viewing_angles * \
+        frames = number_of_viewing_angles * \
             animation_frames * self.width * self.length
+        if self.occlusion_layers > 0:
+            frames *= self.occlusion_layers
+            
+        self.output_index += frames
 
     # Sets the number of recolorable materials
     def set_recolorables(self, number_of_recolorables):
@@ -110,7 +134,7 @@ class TaskBuilder:
         self.length = length
 
     # Sets the rotation applied to future render angles
-    def set_rotation(self, view_angle, bank_angle, vertical_angle, mid_angle):
+    def set_rotation(self, view_angle, bank_angle=0, vertical_angle=0, mid_angle=0):
         self.view_angle = view_angle
         self.bank_angle = bank_angle
         self.vertical_angle = vertical_angle
@@ -122,6 +146,10 @@ class TaskBuilder:
         self.bank_angle = 0
         self.vertical_angle = 0
         self.mid_angle = 0
+
+    # Sets the number of occlusion layers
+    def set_occlusion_layers(self, layers):
+        self.occlusion_layers = layers
 
     # Creates a render task with the supplied angles. Clears the buffer for reuse of the task builder
     def create_task(self, context):
@@ -136,6 +164,10 @@ class TaskBuilder:
 
         self.width = 1
         self.length = 1
+
+        self.set_offset(0, 0)
+
+        self.set_occlusion_layers(0)
 
         self.recolorables = 0
 

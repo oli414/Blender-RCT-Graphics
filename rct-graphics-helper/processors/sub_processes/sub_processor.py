@@ -7,15 +7,15 @@ Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
 RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
-# Base processor for processing render frames
+# Sub processor for performing a sub task
 
 
-class FrameProcessor:
+class SubProcessor:
     def __init__(self):
         self.is_async = False
 
-    def applicable(self, frame):
+    def applicable(self, context):
         return True
 
-    def process(self, frame, callback=None):
+    def process(self, context, callback=None):
         print("Invalid processor. Processor does not implement a process method.")
