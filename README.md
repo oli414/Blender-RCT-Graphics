@@ -11,13 +11,19 @@ The following programs are necessary:
 - [ImageMagick](https://imagemagick.org/script/download.php) (7.0.8-6 or higher. Q16 **Without** HDRI) added to the Path variable as "Magick". For Windows install the "ImageMagick Q16 x64 static.exe" option.
 - [Blender (2.79)](https://download.blender.org/release/Blender2.79/)
 
+**Optional**
+
+- [Sprite Compiler](https://github.com/IntelOrca/libsawyer/releases/tag/v1.1.0) The Libsawyer Sprite Compiler is recommended as it allows you to optimize the sprites for OpenRCT2 by packing them into a .dat file, this file is used by the .parkobj generation when activated. Download the libsawyer-tools zip file (For windows download "libsawyer-tools-win-x64.zip"), copy the `gxc.exe` file to a convenient directory and [add it to the path variable](https://docs.microsoft.com/en-us/previous-versions/office/developer/sharepoint-2010/ee537574(v=office.14))
+- [OpenGraphics Repository](https://github.com/openrct2/opengraphics) Having the OpenGraphics repository cloned in combination with Node.js allows the add-on to automatically create the asset pack file. On step 5 of the add-on installation point the OpenGraphics path to where you have the repository cloned. 
+- [Node.js](https://nodejs.org/en/) (16.15.0 LTS or higher) Required for the asset pack workflow for OpenGraphics.
+
 # Installing
 
 1. Download the [latest release](https://github.com/oli414/Blender-RCT-Graphics/releases) of the RCT Graphics Helper Blender add-on.
 2. In Blender, click on File > User Preferences > Add-ons > "Install Add-on from File..."
 3. In the file explorer window, select the downloaded RCT Graphics Helper zip file.
 4. Enable the add-on by clicking the checkbox to the left of "RendeR: RCT Graphics Helper"
-5. Expand the RCT Graphics Helper add-on settings, and set the "OpenRCT2 Object Folder" path to the location of the /openrct2/object folder.
+5. Expand the RCT Graphics Helper add-on settings, and set the "OpenRCT2 Path" path to the location of the /openrct2/ folder that contains the object directory.
 6. Click "Save User Settings".
 
 # Usage
