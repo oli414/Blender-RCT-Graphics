@@ -60,6 +60,9 @@ class SpriteProcessor(SubProcessor):
             if callback != None:
                 callback()
 
+        if not os.path.exists(master_context.task.get_output_folder()):
+            os.mkdir(master_context.task.get_output_folder())
+
         if not os.path.exists(os.path.join(master_context.task.get_output_folder(), "sprites")):
             os.mkdir(os.path.join(
                 master_context.task.get_output_folder(), "sprites"))

@@ -23,7 +23,7 @@ bl_info = {
     "name": "RCT Graphics Helper",
     "description": "Render tool to replicate RCT graphics",
     "author": "Olivier Wervers",
-    "version": (0, 4, 0),
+    "version": (0, 4, 1),
     "blender": (2, 79, 0),
     "location": "Render",
     "support": "COMMUNITY",
