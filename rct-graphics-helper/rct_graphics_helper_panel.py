@@ -27,7 +27,7 @@ class GraphicsHelperPanel(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_rct_graphics_helper"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS'
-    bl_category = 'RollerCoaster Tycoon'
+    bl_category = 'RCT Tools'
 
     def draw(self, context):
 
