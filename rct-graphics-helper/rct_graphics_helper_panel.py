@@ -21,13 +21,13 @@ from .operators.render_tiles_operator import RenderTiles
 
 from .models.palette import palette_colors, palette_colors_details
 
-
 class GraphicsHelperPanel(bpy.types.Panel):
+
     bl_label = "RCT Graphics Helper"
-    bl_idname = "RENDER_PT_rct_graphics_helper"
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "render"
+    bl_idname = "VIEW3D_PT_rct_graphics_helper"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'TOOLS'
+    bl_category = 'RCT Tools'
 
     def draw(self, context):
 

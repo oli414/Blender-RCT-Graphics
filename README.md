@@ -30,7 +30,7 @@ The following programs are necessary:
 
 1. Open an existing file, or create a new file and make sure it's saved in its own folder.
 2. Remove any global light sources.
-3. In the render properties tab on the right, click "Initialize / Repair" in the "RCT Graphics Helper" section.
+3. In the RCT Tools toolbar on the 3D view toolshelf, click "Initialize / Repair" in the "RCT Graphics Helper" section.
 4. This will create the lighting rig, and set the correct render settings.
 5. More options are now available in the RCT Graphics Helper section. Click the "Render" button to start rendering the scene.
 6. In the folder where the Blend file is saved, an "output" folder has been created with the rendered image files.
