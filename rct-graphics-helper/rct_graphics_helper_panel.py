@@ -1,5 +1,5 @@
 '''
-Copyright (c) 2022 RCT Graphics Helper developers
+Copyright (c) 2023 RCT Graphics Helper developers
 
 For a complete list of all authors, please refer to the addon's meta info.
 Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
@@ -20,6 +20,7 @@ from .operators.walls_render_operator import RenderWalls
 from .operators.render_tiles_operator import RenderTiles
 
 from .models.palette import palette_colors, palette_colors_details
+from .angle_sections.track import sprite_group_names, legacy_group_names
 
 class GraphicsHelperPanel(bpy.types.Panel):
 
@@ -170,25 +171,48 @@ class GraphicsHelperPanel(bpy.types.Panel):
             text = "Failed"
         row.operator("render.rct_walls", text=text)
 
+    legacy_group_display_order = [
+        "VEHICLE_SPRITE_FLAG_FLAT",
+        "VEHICLE_SPRITE_FLAG_FLAT_BANKED",
+        "VEHICLE_SPRITE_FLAG_GENTLE_SLOPES",
+        "VEHICLE_SPRITE_FLAG_GENTLE_SLOPE_BANKED_TURNS",
+        "VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPES",
+        "VEHICLE_SPRITE_FLAG_DIAGONAL_SLOPE_BANKED",
+        "VEHICLE_SPRITE_FLAG_STEEP_SLOPES",
+        "VEHICLE_SPRITE_FLAG_VERTICAL_SLOPES",
+        "VEHICLE_SPRITE_FLAG_INLINE_TWISTS",
+        "VEHICLE_SPRITE_FLAG_CORKSCREWS",
+        "VEHICLE_SPRITE_FLAG_ZERO_G_ROLLS",
+        "VEHICLE_SPRITE_FLAG_CURVED_LIFT_HILL",
+        "VEHICLE_SPRITE_FLAG_RESTRAINT_ANIMATION"
+    ]
+
     def draw_vehicle_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_vehicle_properties
         general_properties = scene.rct_graphics_helper_general_properties
 
+        row = layout.row()
+        row.prop(properties,"sprite_group_mode")
+
         box = layout.box()
-
-        row = box.row()
-        row.label("Ride Vehicle Track Properties:")
-
-        split = box.split(.50)
+        split = box.split(0.5)
         columns = [split.column(), split.column()]
         i = 0
-        for sprite_track_flagset in properties.sprite_track_flags_list:
-            columns[i % 2].row().prop(properties, "sprite_track_flags",
-                                      index=i, text=sprite_track_flagset.name)
-            i += 1
-
-        row = layout.row()
-        row.prop(properties, "restraint_animation")
+        if properties.sprite_group_mode == "SIMPLE":
+            for legacy_group_name in self.legacy_group_display_order:
+                sprite_track_flagset = properties.legacy_spritegroups[legacy_group_name]
+                index = legacy_group_names.index(legacy_group_name)
+                columns[i % 2].row().prop(properties, "legacy_flags",
+                                          index=index, text=sprite_track_flagset.name)
+                i += 1
+        else:
+            columns = [column.split(0.667) for column in columns]
+            subcolumns = [columns[0].column(), columns[0].column(),columns[1].column(), columns[1].column()]
+            splitpoint = len(sprite_group_names) // 2
+            for sprite_group_name in sprite_group_names:
+                subcolumns[(i > splitpoint) * 2].row().label(sprite_group_name+":")
+                subcolumns[(i > splitpoint) * 2 + 1].row().prop(properties, sprite_group_name, text = "")
+                i += 1
 
         row = layout.row()
         row.prop(properties, "inverted_set")
