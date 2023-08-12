@@ -13,11 +13,7 @@ import os
 
 from .operators.init_operator import Init
 
-from .operators.vehicle_render_operator import RenderVehicle
-
-from .operators.walls_render_operator import RenderWalls
-
-from .operators.render_tiles_operator import RenderTiles
+from .operators.render_switch_operator import RenderRCTSwitch
 
 from .models.palette import palette_colors, palette_colors_details
 
@@ -149,7 +145,7 @@ class GraphicsHelperPanel(bpy.types.Panel):
         text = "Render"
         if general_properties.rendering:
             text = "Failed"
-        row.operator("render.rct_static", text=text)
+        row.operator("render.rct_switch", text=text)
 
     def draw_walls_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_walls_properties
@@ -168,7 +164,7 @@ class GraphicsHelperPanel(bpy.types.Panel):
         text = "Render"
         if general_properties.rendering:
             text = "Failed"
-        row.operator("render.rct_walls", text=text)
+        row.operator("render.rct_switch", text=text)
 
     def draw_vehicle_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_vehicle_properties
@@ -197,4 +193,4 @@ class GraphicsHelperPanel(bpy.types.Panel):
         text = "Render"
         if general_properties.rendering:
             text = "Failed"
-        row.operator("render.rct_vehicle", text=text)
+        row.operator("render.rct_switch", text=text)

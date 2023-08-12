@@ -16,6 +16,7 @@ from .properties.walls_properties import register_walls_properties, unregister_w
 from .properties.general_properties import register_general_properties, unregister_general_properties
 from .rct_graphics_helper_panel import GraphicsHelperPanel
 from . import developer_utils
+
 import importlib
 import bpy
 
