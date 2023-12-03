@@ -16,6 +16,10 @@ class MagickCommand(object):
             "\" \"".join(inputs) + \
             "\" +append -background none"
 
+    # Writes rbg or rbga data to output
+    def pixel_data(self, image):
+        self.full_command = '"'+ image + '" -format %c -depth 8 histogram:info:-'
+
     # Writes the current result to the MPR for reuse in the same command. The cached result can be referenced using mpr:{id}
     def write_to_cache(self, id, delete_previous=False, next_file=""):
         delete_addition = ""
@@ -100,10 +104,10 @@ class MagickCommand(object):
 
     # Gets the cli command to perform the ImageMagick operation
 
-    def get_command_string(self, magick_path, output):
+    def get_command_string(self, magick_path, output = None):
         if self.use_repage:
             self.full_command = self.full_command + " +repage"
-        final_command = magick_path + " " + self.full_command + " \"" + output + "\""
+        final_command = magick_path + " " + self.full_command + (output and " \"" + output + "\"" or "")
         if os.name == "posix":
             final_command = final_command.replace("(", "\(").replace(")", "\)")
         return final_command

@@ -43,6 +43,9 @@ class PostProcessor(SubProcessor):
         magick_command.quantize(self.renderer.get_palette_path(
             frame.base_palette), self.renderer.floyd_steinberg_diffusion)
 
+        # this should be moved somewhere it can run once per palette change
+        self.renderer.get_recolor_shades()
+
         # Force the recolorables to a palette that only contains the recolorable color
         channels_to_exclude_for_mai = ["Green", "Blue"]
 
@@ -58,21 +61,10 @@ class PostProcessor(SubProcessor):
             forced_color_render = MagickCommand("mpr:render")
             forced_color_render.quantize(self.renderer.get_palette_path(
                 palette), self.renderer.floyd_steinberg_diffusion)
-
-            if i == 0:
-                # Replace our clover green recolor 1 with the OpenRCT2 orange recolor 1
-                forced_color_render.replace_color("#003F21", "#6F332F")
-                forced_color_render.replace_color("#00672F", "#83372F")
-                forced_color_render.replace_color("#0B7B41", "#973F33")
-                forced_color_render.replace_color("#178F51", "#AB4333")
-                forced_color_render.replace_color("#1FA35C", "#BF4B2F")
-                forced_color_render.replace_color("#27B768", "#D34F2B")
-                forced_color_render.replace_color("#3BDB7F", "#E75723")
-                forced_color_render.replace_color("#5BEF98", "#FF5F1F")
-                forced_color_render.replace_color("#77F3A9", "#FF7F27")
-                forced_color_render.replace_color("#97F7BE", "#FF9B33")
-                forced_color_render.replace_color("#B7FBD0", "#FFB73F")
-                forced_color_render.replace_color("#D7FFE5", "#FFCF4B")
+            
+            # Replace our input color with the appropriate orct2 remap color
+            for i in range(min(len(palette.shades), len(orct2_palette.shades))):
+                forced_color_render.replace_color(palette.shades[i],orct2_palette.shades[i])
 
             magick_command.mask_mix(forced_color_render, mask)
 

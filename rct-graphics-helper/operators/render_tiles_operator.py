@@ -22,7 +22,11 @@ class RenderTiles(RCTRender, bpy.types.Operator):
         scene = context.scene
         props = scene.rct_graphics_helper_static_properties
         general_props = scene.rct_graphics_helper_general_properties
-
+        
+        # Update the remap palettes with the ones we set. These colors will be recolored into OpenRCT2's remap 1, 2, 3
+        # colors on materials with the appropriate index set
+        self.palette_manager.set_recolor_palettes(general_props.primary_remap_input, general_props.secondary_remap_input,
+                                                  general_props.tertiary_remap_input)
         # Create the list of frames with our parameters
         self.task_builder.clear()
         self.task_builder.set_anti_aliasing_with_background(

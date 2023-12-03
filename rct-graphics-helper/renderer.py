@@ -114,6 +114,9 @@ class Renderer:
         if callback != None:
             callback()
 
+    def get_recolor_shades(self):
+        self.palette_manager.get_recolor_shades(self)
+
     def get_palette_path(self, palette):
         palette.prepare(self)
         return palette.path

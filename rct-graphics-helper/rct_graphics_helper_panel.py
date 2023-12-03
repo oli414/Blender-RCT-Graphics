@@ -101,6 +101,18 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row.separator()
 
         row = layout.row()
+        row.label("Remap Colors:")
+        
+        row = layout.row()
+        row.prop(properties,"primary_remap_input")
+        
+        row = layout.row()
+        row.prop(properties,"secondary_remap_input")
+        
+        row = layout.row()
+        row.prop(properties,"tertiary_remap_input")
+
+        row = layout.row()
         row.label("Dither Palette:")
 
         row = layout.row()

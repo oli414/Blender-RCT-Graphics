@@ -11,7 +11,7 @@ import bpy
 import math
 import os
 
-from ..models.palette import palette_colors, palette_colors_details
+from ..models.palette import palette_colors, palette_colors_details, create_remap_enumlist
 
 
 class GeneralProperties(bpy.types.PropertyGroup):
@@ -93,6 +93,21 @@ class GeneralProperties(bpy.types.PropertyGroup):
         default=defaults,
         description="Which color groups to dither to. Recolorables will be excluded from this palette when used to avoid conflicts.",
         size=len(defaults))
+
+    primary_remap_input = bpy.props.EnumProperty(
+        name="Primary Color",
+        items= create_remap_enumlist("recolor_1")
+    )
+
+    secondary_remap_input = bpy.props.EnumProperty(
+        name="Secondary Color",
+        items= create_remap_enumlist("magenta")
+    )
+
+    tertiary_remap_input = bpy.props.EnumProperty(
+        name="Tertiary Color",
+        items= create_remap_enumlist("yellow")
+    )
 
     render_mode = bpy.props.EnumProperty(
         name="Render Mode",

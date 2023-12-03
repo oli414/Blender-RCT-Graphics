@@ -9,6 +9,7 @@ RCT Graphics Helper is licensed under the GNU General Public License version 3.
 
 import subprocess
 import os
+import re
 
 from ..magick_command import MagickCommand
 from ..res.res import res_path
@@ -176,8 +177,36 @@ palette_colors_details = {
     }
 }
 
+palettes_for_recolor = [
+    "black", "lavender_purple", "violet_purple","blue", "teal","yellow_green",
+    "sea_green","light_olive_green","dark_olive_green","lime_green","yellow",
+    "bright_yellow","orange","salmon","sandy_brown","bordeaux_red","bright_red",
+    "magenta","recolor_1","recolor_1_orct2"
+]
+
+def create_remap_tuple(paletteName):
+    if not paletteName in palette_colors_details:
+        return
+    palette = palette_colors_details[paletteName]
+    return tuple([paletteName, palette["title"], palette["Description"]])
+
+def create_remap_enumlist(defaultSelection):
+    myPaletteColors = palettes_for_recolor.copy()
+    myPaletteColors.remove(defaultSelection)
+    options = [create_remap_tuple(i) for i in myPaletteColors]
+    options.insert(0,create_remap_tuple(defaultSelection))
+    return options
+
 palette_base_path = os.path.join(res_path, "palettes")
 palette_groups_path = os.path.join(palette_base_path, "groups")
+
+class RGBA:
+    def __init__(self, hexString, red, green, blue, alpha = 255):
+        self.hex = hexString
+        self.red = int(red)
+        self.green = int(green)
+        self.blue = int(blue)
+        self.alpha = int(alpha)
 
 # Collection of color groups to create a palette from
 
@@ -188,6 +217,7 @@ class Palette:
         self.generated = False
         self.invalidated = False
         self.path = ""
+        self.shades = []
 
         if path != None:
             self.path = path
@@ -242,3 +272,19 @@ class Palette:
         self.path = output_path
         self.generated = True
         self.invalidated = False
+
+    # generates a list of hexadecimal colors usable in ImageMagick
+    def get_shades(self, renderer):
+        cmd = MagickCommand("")
+        cmd.pixel_data(self.path)
+        raw_output = subprocess.check_output(cmd.get_command_string(
+            renderer.magick_path), shell = True)
+        output = raw_output.decode("utf-8")
+        data_rgb = re.findall(" \(([\d,]+)\)", output)
+        data_hex = re.findall("#[\w]+", output)
+        if (len(data_rgb) != len(data_hex)):
+            print(len(data_rgb), data_rgb)
+            print(len(data_hex), data_hex)
+            assert(len(data_rgb) != len(data_hex))
+        colors_present = [RGBA(data_hex[i], *(data_rgb[i].split(","))) for i in range(len(data_rgb))]
+        self.shades = [shade.hex for shade in colors_present if shade.alpha == 255]

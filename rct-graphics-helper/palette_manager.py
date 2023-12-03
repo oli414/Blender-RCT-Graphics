@@ -12,7 +12,7 @@ import os
 import bpy
 import math
 
-from .models.palette import Palette, palette_base_path
+from .models.palette import Palette, palette_base_path, palette_groups_path
 
 default_full_palette = Palette(os.path.join(
     palette_base_path, "default_full_palette.bmp"), [
@@ -52,12 +52,6 @@ rider_palette = Palette(os.path.join(palette_base_path, "peep_palette.bmp"), [
     "transparent"
 ])
 
-recolor_1_palette = Palette(os.path.join(
-    palette_base_path, "recolor_1_palette.bmp"), [
-    "recolor_1",
-    "transparent"
-])
-
 recolor_1_orct2_palette = Palette(os.path.join(
     palette_base_path, "recolor_1_orct2_palette.bmp"), [
     "recolor_1_orct2",
@@ -86,17 +80,35 @@ custom_palette = Palette(os.path.join(
 
 class PaletteManager:
     def __init__(self):
-        self.recolor_palettes = [
-            recolor_1_palette,
-            recolor_2_palette,
-            recolor_3_palette
-        ]
+        self.recolor_palettes = []
 
         self.orct2_recolor_palettes = [
             recolor_1_orct2_palette,
             recolor_2_palette,
             recolor_3_palette
         ]
+
+    def set_recolor_palettes(self, recolor1, recolor2, recolor3):
+        self.recolor_palettes = [
+            Palette(
+                os.path.join(palette_groups_path, recolor1 + ".png"),
+                [ recolor1 ]
+            ),
+            Palette(
+                os.path.join(palette_groups_path, recolor2 + ".png"),
+                [ recolor2 ]
+            ),
+            Palette(
+                os.path.join(palette_groups_path, recolor3 + ".png"),
+                [ recolor3 ]
+            ),
+        ]
+
+    def get_recolor_shades(self, renderer):
+        for palette in self.recolor_palettes:
+            palette.get_shades(renderer)
+        for palette in self.orct2_recolor_palettes:
+            palette.get_shades(renderer)
 
     # Gets a base palette for the selected palette mode for the selected number of recolorables
     def get_base_palette(self, selected_palette_mode, recolors, preference="FULL"):
