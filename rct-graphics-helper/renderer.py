@@ -38,7 +38,7 @@ class Renderer:
         self.context = context
 
         self.magick_path = "magick"
-        self.floyd_steinberg_diffusion = 5
+        self.floyd_steinberg_diffusion = 35
 
         self.palette_manager = palette_manager
 
@@ -62,6 +62,9 @@ class Renderer:
 
         bpy.app.handlers.render_complete.append(self._render_finished)
         bpy.app.handlers.render_cancel.append(self._render_reset)
+
+    def set_dither(self, percent):
+        self.floyd_steinberg_diffusion = percent
 
     # Render out the current scene
     def render(self, output_still, callback):

@@ -101,6 +101,9 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row.separator()
 
         row = layout.row()
+        row.prop(properties,"dithering_strength")
+        
+        row = layout.row()
         row.label("Dither Palette:")
 
         row = layout.row()

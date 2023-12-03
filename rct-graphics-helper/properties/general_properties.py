@@ -94,6 +94,14 @@ class GeneralProperties(bpy.types.PropertyGroup):
         description="Which color groups to dither to. Recolorables will be excluded from this palette when used to avoid conflicts.",
         size=len(defaults))
 
+    dithering_strength = bpy.props.IntProperty(
+        name = "Dithering Strength",
+        description = "Floyd-Steinberg error diffusion",
+        default = 35,
+        min = 1,
+        max = 100
+    )
+
     render_mode = bpy.props.EnumProperty(
         name="Render Mode",
         items=(

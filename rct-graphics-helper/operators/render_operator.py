@@ -78,6 +78,9 @@ class RCTRender(object):
         render_task_processor = RenderTaskProcessor(
             context, self.palette_manager)
 
+
+        render_task_processor.renderer.set_dither(general_props.dithering_strength)
+
         task = self.create_task(context)
 
         render_task_processor.process(task, finish)
