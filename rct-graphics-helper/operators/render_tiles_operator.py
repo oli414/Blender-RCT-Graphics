@@ -35,7 +35,7 @@ class RenderTiles(RCTRender, bpy.types.Operator):
             general_props.number_of_recolorables)
 
         self.task_builder.set_size(
-            props.object_width, props.object_length)
+            props.object_width, props.object_length, props.invert_tile_positions)
 
         for animationIndex in range(general_props.number_of_animation_frames):
             self.task_builder.add_viewing_angles(

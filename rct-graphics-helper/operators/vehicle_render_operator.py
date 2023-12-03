@@ -27,7 +27,7 @@ class RenderVehicle(RCTRender, bpy.types.Operator):
         self.task_builder.set_anti_aliasing_with_background(
             context.scene.render.use_antialiasing, general_props.anti_alias_with_background, general_props.maintain_aliased_silhouette)
         self.task_builder.set_output_index(general_props.out_start_index)
-        self.task_builder.set_size(1, 1)
+        self.task_builder.set_size(1, 1, False)
 
         # Add vehicle frames
         self.task_builder.set_recolorables(

@@ -44,6 +44,10 @@ class TileIndicesRenderProcessor(SubProcessor):
         meta_render_output = frame.get_meta_render_output_file_name(
             output_suffix)
 
+        if frame.oversized:
+            self.renderer.set_multi_tile_size(frame.width, frame.length)
+        else:
+            self.renderer.set_multi_tile_size(1, 1)
         self.renderer.set_layer(frame.layer)
         self.renderer.set_aa(self.with_anti_aliasing)
         self.renderer.set_meta_output_path(

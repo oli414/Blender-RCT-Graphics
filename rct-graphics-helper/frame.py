@@ -28,6 +28,7 @@ class Frame:
         self.width = 1
         self.length = 1
         self.oversized = False
+        self.invert_tile_positions = False
 
         self.recolorables = 0
 
@@ -99,11 +100,13 @@ class Frame:
         self.offset_x = offset_x
         self.offset_y = offset_y
 
-    def set_multi_tile_size(self, width, length):
+    def set_multi_tile_size(self, width, length, invert_tile_positions):
         self.width = width
         self.length = length
 
         self.oversized = self.width > 1 or self.length > 1
+        if self.oversized:
+            self.invert_tile_positions = invert_tile_positions
 
     def set_layer(self, layer_name):
         self.layer = layer_name

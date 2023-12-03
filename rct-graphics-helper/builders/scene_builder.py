@@ -23,6 +23,8 @@ class SceneBuilder:
     def build(self, context):
         scene = context.scene
 
+        self.remove_scene_object(context, "Lamp")
+
         # Root rig object
         rig_obj = self.create_scene_object(context, "Rig", None)
         rig_obj.location = (0, 0, 0)
@@ -112,7 +114,7 @@ class SceneBuilder:
         lamp_data.use_diffuse = True
         lamp_data.shadow_method = "RAY_SHADOW"
         lamp_data.shadow_ray_sample_method = "ADAPTIVE_QMC"
-        lamp_data.shadow_ray_samples = 2
+        lamp_data.shadow_ray_samples = 4
         lamp_data.shadow_soft_size = 0.5
         lamp_data.shadow_adaptive_threshold = 0.001
 
@@ -129,9 +131,13 @@ class SceneBuilder:
         lamp_data = self.create_lamp_data(context, "FillerLight", "SUN")
 
         lamp_data.energy = 0.5
-        lamp_data.use_specular = False
+        lamp_data.use_specular = True
         lamp_data.use_diffuse = True
-        lamp_data.shadow_method = "NOSHADOW"
+        lamp_data.shadow_method = "RAY_SHADOW"
+        lamp_data.shadow_ray_sample_method = "ADAPTIVE_QMC"
+        lamp_data.shadow_ray_samples = 4
+        lamp_data.shadow_soft_size = 0.5
+        lamp_data.shadow_adaptive_threshold = 0.001
 
         lamp_object = self.create_scene_object(
             context, 'FillerLight', lamp_data)
@@ -161,6 +167,12 @@ class SceneBuilder:
             bpy.data.objects.remove(
                 context.scene.objects[name], do_unlink=True)
         return bpy.data.objects.new(name, data)
+
+    def remove_scene_object(self, context, name):
+        if name in context.scene.objects:
+            bpy.data.objects.remove(
+                context.scene.objects[name], do_unlink=True)
+
 
     def create_lamp_data(self, context, name, type):
         name = self.prefix + name + self.suffix

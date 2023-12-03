@@ -14,6 +14,7 @@ from .properties.vehicle_properties import register_vehicles_properties, unregis
 from .properties.tiles_properties import register_tiles_properties, unregister_tiles_properties
 from .properties.walls_properties import register_walls_properties, unregister_walls_properties
 from .properties.general_properties import register_general_properties, unregister_general_properties
+from .properties.track_properties import register_track_properties, unregister_track_properties
 from .rct_graphics_helper_panel import GraphicsHelperPanel
 from . import developer_utils
 import importlib
@@ -23,7 +24,7 @@ bl_info = {
     "name": "RCT Graphics Helper",
     "description": "Render tool to replicate RCT graphics",
     "author": "Olivier Wervers",
-    "version": (0, 4, 1),
+    "version": (0, 4, 6),
     "blender": (2, 79, 0),
     "location": "Render",
     "support": "COMMUNITY",
@@ -50,6 +51,7 @@ def register():
     register_tiles_properties()
     register_vehicles_properties()
     register_walls_properties()
+    register_track_properties()
 
     print("Registered {} with {} modules".format(
         bl_info["name"], len(modules)))
@@ -65,5 +67,6 @@ def unregister():
     unregister_tiles_properties()
     unregister_vehicles_properties()
     unregister_walls_properties()
+    unregister_track_properties()
 
     print("Unregistered {}".format(bl_info["name"]))

@@ -17,12 +17,30 @@ from .operators.vehicle_render_operator import RenderVehicle
 
 from .operators.walls_render_operator import RenderWalls
 
+from .operators.track_render_operator import RenderTrack
+
 from .operators.render_tiles_operator import RenderTiles
 
 from .models.palette import palette_colors, palette_colors_details
 
-class GraphicsHelperPanel(bpy.types.Panel):
+class RepairConfirmOperator(bpy.types.Operator):
+    """This action will clear out the default camera and light. Changes made to the rig object, compositor nodes and recolorable materials will be lost."""
+    bl_idname = "rct_graphics_helper.repair_confirm"
+    bl_label = "Do you want to (re)create the base scene?"
+    bl_options = {'REGISTER', 'INTERNAL'}
+    
+    @classmethod
+    def poll(cls, context):
+        return True
+    
+    def execute(self, context):
+        bpy.ops.render.rct_init()
+        return {'FINISHED'}
 
+    def invoke(self, context, event):
+        return context.window_manager.invoke_confirm(self, event)
+
+class GraphicsHelperPanel(bpy.types.Panel):
     bl_label = "RCT Graphics Helper"
     bl_idname = "VIEW3D_PT_rct_graphics_helper"
     bl_space_type = 'VIEW_3D'
@@ -35,7 +53,7 @@ class GraphicsHelperPanel(bpy.types.Panel):
         scene = context.scene
 
         row = layout.row()
-        row.operator("render.rct_init", text="Initialize / Repair")
+        row.operator("rct_graphics_helper.repair_confirm", text="Initialize / Repair")
 
         if not "Rig" in context.scene.objects:
             return
@@ -115,6 +133,8 @@ class GraphicsHelperPanel(bpy.types.Panel):
             self.draw_vehicle_panel(scene, box)
         elif properties.render_mode == "WALLS":
             self.draw_walls_panel(scene, box)
+        elif properties.render_mode == "TRACK":
+            self.draw_track_panel(scene, box)
 
         row = layout.row()
         row.prop(properties, "build_gx")
@@ -146,6 +166,10 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row.prop(properties, "object_length")
 
         row = layout.row()
+        if properties.object_width > 1 or properties.object_length > 1:
+            row.prop(properties, "invert_tile_positions")
+
+        row = layout.row()
         text = "Render"
         if general_properties.rendering:
             text = "Failed"
@@ -169,6 +193,26 @@ class GraphicsHelperPanel(bpy.types.Panel):
         if general_properties.rendering:
             text = "Failed"
         row.operator("render.rct_walls", text=text)
+
+    def draw_track_panel(self, scene, layout):
+        properties = scene.rct_graphics_helper_track_properties
+        general_properties = scene.rct_graphics_helper_general_properties
+
+        row = layout.row()
+        row.label("Work in progress")
+        
+        #row = layout.row()
+        #row.operator("render.rct_track", text="Generate Splines")
+        #
+        #row = layout.row()
+        #row.prop(properties, "placeholder")
+#
+        #if "Rig" in context.scene.objects:
+        #    row = layout.row()
+        #    text = "Render"
+        #    if general_properties.rendering:
+        #        text = "Failed"
+        #    row.operator("render.rct_track", text=text)
 
     def draw_vehicle_panel(self, scene, layout):
         properties = scene.rct_graphics_helper_vehicle_properties

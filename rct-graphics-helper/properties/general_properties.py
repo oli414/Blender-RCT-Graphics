@@ -39,7 +39,7 @@ class GeneralProperties(bpy.types.PropertyGroup):
 
     cast_shadows = bpy.props.BoolProperty(
         name="Shadows",
-        description="Control wether or not the render contains shadows.",
+        description="Control whether the lights should cast shadows.",
         default=True)
 
     anti_alias_with_background = bpy.props.BoolProperty(
@@ -48,8 +48,8 @@ class GeneralProperties(bpy.types.PropertyGroup):
         default=False)
 
     maintain_aliased_silhouette = bpy.props.BoolProperty(
-        name="Maintain Aliased Silhouette",
-        description="Maintains the aliased image's silhouette.",
+        name="Maintain Aliased Silhouette (For modular pieces)",
+        description="The image is anti-aliased against the background, but is masked using the aliased silhoutte.",
         default=False)
 
     out_start_index = bpy.props.IntProperty(
@@ -101,7 +101,9 @@ class GeneralProperties(bpy.types.PropertyGroup):
             ("VEHICLE", "Vehicle",
              "Renders a vehicle from the necesssary angles given a set of track ability flags.", 2),
             ("WALLS", "Walls",
-             "Renders a wall piece.", 3)
+             "Renders a wall piece.", 3),
+            ("TRACK", "Track",
+             "Renders track pieces.", 4)
         )
     )
 
@@ -112,13 +114,13 @@ class GeneralProperties(bpy.types.PropertyGroup):
 
     build_gx = bpy.props.BoolProperty(
         name="Generate GX (optimized sprite file)",
-        description="Whether or not to create a .dat sprite file.",
-        default=True)
+        description="Whether or not to create a .dat sprite file. Having GXC installed is required.",
+        default=False)
 
     build_assetpack = bpy.props.BoolProperty(
         name="Generate the asset pack file",
         description="Whether or not to the ORCT2 asset pack file",
-        default=True)
+        default=False)
 
     copy_assetpack_to_orct2 = bpy.props.BoolProperty(
         name="Copy to OpenRCT2",
@@ -127,12 +129,12 @@ class GeneralProperties(bpy.types.PropertyGroup):
 
     build_parkobj = bpy.props.BoolProperty(
         name="Generate .parkobj file",
-        description="Automatically build the .parkobj file.",
+        description="Automatically build the .parkobj file. An object.json file with the object description is required in the output folder.",
         default=False)
 
     copy_parkobj_to_orct2 = bpy.props.BoolProperty(
         name="Copy to OpenRCT2",
-        description="Copy the generated .parkobj file to the ORCT2 objects folder.",
+        description="Copy the generated .parkobj file to the ORCT2 objects folder. Linking your OpenRCT2 Documents folder is required in the add-on preferences.",
         default=False)
 
 

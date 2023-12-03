@@ -28,6 +28,8 @@ class TaskBuilder:
         self.width = 1
         self.length = 1
 
+        self.invert_tile_positions = False
+
         self.use_anti_aliasing = True
         self.anti_alias_with_background = False
         self.maintain_aliased_silhouette = True
@@ -65,7 +67,7 @@ class TaskBuilder:
                 frame_index = start_output_index + i * animation_frames + j
                 frame = Frame(frame_index, self.task, angle + self.view_angle,
                               self.bank_angle, self.vertical_angle, self.mid_angle)
-                frame.set_multi_tile_size(self.width, self.length)
+                frame.set_multi_tile_size(self.width, self.length, self.invert_tile_positions)
 
                 frame.set_offset(self.offset_x, self.offset_y)
 
@@ -92,8 +94,12 @@ class TaskBuilder:
                 if frame.oversized:
                     output_indices = []
                     for k in range(frame.width * frame.length):
+                        tile_index = k
+                        if frame.invert_tile_positions:
+                            tile_index = (frame.width * frame.length - k - 1)
                         output_indices.append(
-                            start_output_index + k * animation_frames * number_of_viewing_angles + j * number_of_viewing_angles + i)
+                            start_output_index + tile_index * animation_frames * number_of_viewing_angles + j * number_of_viewing_angles + i)
+                        
                     frame.set_output_indices(output_indices)
 
                 self.angles.append(frame)
@@ -129,9 +135,10 @@ class TaskBuilder:
             not anti_alias_with_background) or maintain_aliased_silhouette) and use_anti_aliasing
 
     # Sets the size of the render in tiles
-    def set_size(self, width, length):
+    def set_size(self, width, length, invert_tile_positions):
         self.width = width
         self.length = length
+        self.invert_tile_positions = invert_tile_positions
 
     # Sets the rotation applied to future render angles
     def set_rotation(self, view_angle, bank_angle=0, vertical_angle=0, mid_angle=0):

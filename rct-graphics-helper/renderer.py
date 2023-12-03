@@ -143,6 +143,21 @@ class Renderer:
             self.context.scene.render.layers["Riders {}".format(
                 i + 1)].material_override = material
 
+    def set_multi_tile_size(self, width, length):
+        width_node = None
+        length_node = None
+        for key, value in self.context.scene.node_tree.nodes.items():
+            if value.label == "width":
+                width_node = value
+                value.outputs[0].default_value = width
+            if value.label == "length":
+                length_node = value
+                value.outputs[0].default_value = length
+        if width_node is None:
+            raise Exception("Width composite node could not be found, please click repair")
+        if length_node is None:
+            raise Exception("Length composite node could not be found, please click repair")
+
     # Sets the active render layer
     def set_layer(self, layer_name):
         layers = ["Editor"]
