@@ -16,9 +16,9 @@ from ..builders.task_builder import TaskBuilder
 from ..operators.render_operator import RCTRender
 
 class TrackProperties(bpy.types.PropertyGroup):
-    placeholder = bpy.props.BoolProperty(
-        name="Placeholder",
-        description="Test.",
+    multi_layer = bpy.props.BoolProperty(
+        name="Multi-Layer",
+        description="Whether the track needs multiple layers to appear both behind and in front of the vehicle sprites",
         default=False)
 
 

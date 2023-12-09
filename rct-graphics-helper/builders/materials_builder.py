@@ -39,12 +39,13 @@ class MaterialsBuilder(NodesBuilder):
         material.specular_intensity = 1
         material.specular_hardness = 25
         material.specular_shader = "PHONG"
+        material.use_fake_user = True
 
         material.pass_index = pass_index
 
         return material
 
-    def create_world_position_material(self, context):
+    def create_world_position_material(self, context, x_offset=0, y_offset=0):
         material = self.create_material("WorldPosition")
 
         material.use_nodes = True
@@ -56,7 +57,7 @@ class MaterialsBuilder(NodesBuilder):
         self.next_column()
 
         mapping_node = self.create_node("ShaderNodeMapping")
-        mapping_node.translation = (8, 8, 0)
+        mapping_node.translation = (8 - x_offset / 4, 8 - y_offset / 4, 0)
         mapping_node.scale = (0.25, 0.25, 0.25)
         mapping_node.use_min = True
         mapping_node.use_max = True

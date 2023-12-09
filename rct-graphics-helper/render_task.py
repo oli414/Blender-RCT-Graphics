@@ -17,6 +17,7 @@ class RenderTask:
     def __init__(self, context):
         self.context = context
         self.frames = []
+        self.steps = []
         self.output_info = []
 
     def get_temporary_output_folder(self):

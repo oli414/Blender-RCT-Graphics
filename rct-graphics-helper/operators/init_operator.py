@@ -59,6 +59,21 @@ class Init(bpy.types.Operator):
                                          True, False, False, False, False, False, False, False, False, False, False)
             riders_layer.use = False
 
+        # Track render layers
+        track_layer = self.create_render_layer(context, "Track")
+        track_layer.layers = (True, False, False, False, False, False, False, False,
+                              False, False, False, False, False, False, False, False, False, False, False, False)
+        track_layer.layers_zmask = (True, False, False, False, False, False, False, False,
+                                    False, False, False, False, False, False, False, False, False, False, False, False)
+        track_layer.use = False
+        
+        track_occluded_layer = self.create_render_layer(context, "Track Occluded")
+        track_occluded_layer.layers = (False, True, False, False, False, False, False, False,
+                              False, False, False, False, False, False, False, False, False, False, False, False)
+        track_occluded_layer.layers_zmask = (True, False, False, False, False, False, False, False,
+                                    False, False, False, False, False, False, False, False, False, False, False, False)
+        track_occluded_layer.use = False
+
         self.delete_default_render_layer(context)
 
         # Create dependencies in the context

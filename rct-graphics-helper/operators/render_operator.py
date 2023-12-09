@@ -11,6 +11,9 @@ import bpy
 import math
 import os
 
+from ..builders.render_steps_builder import RenderStepsBuilder
+from ..processors.render_task_processor_v2 import RenderTaskProcessorV2
+
 from ..palette_manager import PaletteManager
 
 from ..builders.task_builder import TaskBuilder
@@ -37,6 +40,7 @@ class RCTRender(object):
         self.context = None
 
         self.task_builder = TaskBuilder()
+        self.render_steps_builder = RenderStepsBuilder()
 
         self.palette_manager = PaletteManager()
 
@@ -77,9 +81,15 @@ class RCTRender(object):
 
         render_task_processor = RenderTaskProcessor(
             context, self.palette_manager)
+        
+        render_task_processor_v2 = RenderTaskProcessorV2(
+            context, self.palette_manager)
 
         task = self.create_task(context)
 
-        render_task_processor.process(task, finish)
+        if len(task.steps) > 0:
+            render_task_processor_v2.process(task, finish)
+        else:
+            render_task_processor.process(task, finish)
 
         return {'FINISHED'}

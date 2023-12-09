@@ -28,6 +28,8 @@ class TaskBuilder:
         self.width = 1
         self.length = 1
 
+        self.tiles = []
+
         self.invert_tile_positions = False
 
         self.use_anti_aliasing = True
@@ -67,7 +69,7 @@ class TaskBuilder:
                 frame_index = start_output_index + i * animation_frames + j
                 frame = Frame(frame_index, self.task, angle + self.view_angle,
                               self.bank_angle, self.vertical_angle, self.mid_angle)
-                frame.set_multi_tile_size(self.width, self.length, self.invert_tile_positions)
+                frame.set_multi_tile_size(self.width, self.length, self.invert_tile_positions, self.tiles)
 
                 frame.set_offset(self.offset_x, self.offset_y)
 
@@ -135,10 +137,15 @@ class TaskBuilder:
             not anti_alias_with_background) or maintain_aliased_silhouette) and use_anti_aliasing
 
     # Sets the size of the render in tiles
-    def set_size(self, width, length, invert_tile_positions):
+    def set_size(self, width, length, invert_tile_positions=False, tiles=None):
         self.width = width
         self.length = length
         self.invert_tile_positions = invert_tile_positions
+
+        if tiles is None:
+            self.tiles = [None] * (width * length)
+            for i in range(width * length):
+                self.tiles[i] = [i]
 
     # Sets the rotation applied to future render angles
     def set_rotation(self, view_angle, bank_angle=0, vertical_angle=0, mid_angle=0):

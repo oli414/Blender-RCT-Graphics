@@ -65,11 +65,28 @@ class Renderer:
 
     # Render out the current scene
     def render(self, output_still, callback):
+        self.context.scene.render.use_compositing = True
         self.render_finished_callback = callback
 
         self._render_started()
 
         bpy.ops.render.render(write_still=output_still)  # "INVOKE_DEFAULT"
+
+    def render_composite(self, callback):
+        self.context.scene.render.use_compositing = True
+        self.render_finished_callback = callback
+
+        self._render_started()
+
+        bpy.ops.render.render(write_still=False)  # "INVOKE_DEFAULT"
+
+    def render_still(self, callback):
+        self.context.scene.render.use_compositing = False
+        self.render_finished_callback = callback
+
+        self._render_started()
+
+        bpy.ops.render.render(write_still=True)  # "INVOKE_DEFAULT"
 
     def _render_started(self):
         if self.rendering:
@@ -94,16 +111,21 @@ class Renderer:
         if self.render_finished_callback != None:
             self.render_finished_callback()
 
+    def reset(self):
+        self.set_multi_tile_size(1, 1)
+        self.set_multi_tile_offset(0, 0)
+        self.set_aa(self.started_with_anti_aliasing)
+        self.set_aa_with_background(False)
+        self.set_override_material(None)
+        self.set_layer("Editor")
+
     def _render_reset(self, _=None):
         if not self.rendering:
             return
 
         self.rendering = False
-
-        self.set_aa(self.started_with_anti_aliasing)
-        self.set_aa_with_background(False)
-        self.set_override_material(None)
-        self.set_layer("Editor")
+        
+        self.reset()
 
     def _render_finished_safe(self):
         self.timer.cancel()
@@ -139,9 +161,18 @@ class Renderer:
     # Sets the global override material that the scene is rendered with
     def set_override_material(self, material):
         self.context.scene.render.layers["Editor"].material_override = material
+        self.context.scene.render.layers["Track"].material_override = material
+        self.context.scene.render.layers["Track Occluded"].material_override = material
         for i in range(8):
             self.context.scene.render.layers["Riders {}".format(
                 i + 1)].material_override = material
+
+    def set_multi_tile_offset(self, x, y):
+        materials_builder = MaterialsBuilder()
+        materials_builder.create_world_position_material(self.context, x, y)
+        self.world_position_material = find_material_by_name(
+            "WorldPosition")
+        self.set_override_material(self.world_position_material)
 
     def set_multi_tile_size(self, width, length):
         width_node = None
@@ -160,7 +191,7 @@ class Renderer:
 
     # Sets the active render layer
     def set_layer(self, layer_name):
-        layers = ["Editor"]
+        layers = ["Editor", "Track", "Track Occluded"]
         for i in range(8):
             layers.append("Riders {}".format(i + 1))
         for layer in layers:

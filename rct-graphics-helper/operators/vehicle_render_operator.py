@@ -12,7 +12,7 @@ import math
 import os
 
 from ..operators.render_operator import RCTRender
-from ..angle_sections.track import track_angle_sections, track_angle_sections_names
+from ..data.vehicle_sprites import track_angle_sections, track_angle_sections_names
 
 
 class RenderVehicle(RCTRender, bpy.types.Operator):

@@ -6,8 +6,8 @@ class MagickCommand(object):
     full_command = ""
 
     def __init__(self, input):
-        self.full_command = self.__stringify_input(input)
         self.use_repage = False
+        self.full_command = self.__stringify_input(input)
 
     # Replaces the command with a montage command for generating spritesheets
     def as_montage(self, inputs):
@@ -85,6 +85,22 @@ class MagickCommand(object):
         self.full_command = "( " + self.full_command + \
             " ) ( " + \
             mask + " ) -compose CopyOpacity -composite"
+    
+    # Copies the alpha channel from the alpha_source and applies it to the current source
+    def copy_alpha_v2(self, alpha_source):
+        mask = self.__stringify_input(
+            alpha_source)
+        self.full_command = "( " + self.full_command + \
+            " ) ( " + \
+            mask + " ) -compose Dst_In -alpha Set -composite"
+        
+    # Copies the alpha channel from the alpha_source and applies the inverse to the current source
+    def copy_alpha_inverted_v2(self, alpha_source):
+        mask = self.__stringify_input(
+            alpha_source)
+        self.full_command = "( " + self.full_command + \
+            " ) ( " + \
+            mask + " ) -compose Dst_Out -alpha Set -composite"
 
     def set_bit_depth(self, depth):
         self.full_command += " -depth " + str(depth)

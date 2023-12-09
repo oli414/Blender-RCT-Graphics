@@ -13,6 +13,8 @@ import os
 
 from .operators.init_operator import Init
 
+from .operators.track_init_operator import TrackInit
+
 from .operators.vehicle_render_operator import RenderVehicle
 
 from .operators.walls_render_operator import RenderWalls
@@ -201,11 +203,14 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row = layout.row()
         row.label("Work in progress")
         
-        #row = layout.row()
-        #row.operator("render.rct_track", text="Generate Splines")
-        #
-        #row = layout.row()
-        #row.prop(properties, "placeholder")
+        row = layout.row()
+        row.operator("render.rct_track_init", text="Generate Splines")
+        
+        row = layout.row()
+        row.prop(properties, "multi_layer")
+        
+        row = layout.row()
+        row.operator("render.rct_track", text="Render")
 #
         #if "Rig" in context.scene.objects:
         #    row = layout.row()
