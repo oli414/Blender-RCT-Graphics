@@ -7,22 +7,21 @@ Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
 RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
+import sched
+import time
 import faulthandler
 import os
 import threading
+import copy
 import bpy
 
+from sys import platform
+
+from .res.res import res_path
+from .helpers import find_material_by_name
 from .builders.materials_builder import MaterialsBuilder
 
 from .palette_manager import PaletteManager
-
-
-def find_material_by_name(material_name):
-    for mat in bpy.data.materials:
-        if mat.name == material_name:
-            return mat
-    return None
-
 
 def find_node_by_label(tree, node_to_find):
     for node in tree.nodes:
@@ -30,14 +29,45 @@ def find_node_by_label(tree, node_to_find):
             return node
     return None
 
-# Model for controlling the render settings, and starting render processes
 
+class RenderSettings:
+    def __init__(self):
+        self.aa = True
+        self.aa_with_background = True
+        self.maintain_aa_silhoutte = False
+        self.shadows = True
+        self.width = 1
+        self.length = 1
+        self.floor = -100
+        self.layer = "Editor"
+        self.frame = 0
+        
+    def from_general_props(self, general_props):
+        self.aa_with_background = general_props.anti_alias_with_background
+
+    def clone(self):
+        return copy.deepcopy(self)
+    
+    def is_oversized(self):
+        return self.width > 1 or self.length > 1
+    
+    def get_frame_output_suffix(self):
+        return self.frame.zfill(4)
+
+
+# Controls the render settings, and starting render processes
 
 class Renderer:
     def __init__(self, context, palette_manager):
         self.context = context
 
-        self.magick_path = "magick"
+        self.magick_path = os.path.join(res_path, "dependencies", "imagemagick", "magick")
+
+        # If the system platform does not support the included imagemagick version, rely
+        # on the path variable instead.
+        if platform != "win32":
+            self.magick_path = "magick"
+        
         self.floyd_steinberg_diffusion = 5
 
         self.palette_manager = palette_manager
@@ -48,12 +78,6 @@ class Renderer:
 
         self.world_position_material = find_material_by_name("WorldPosition")
 
-        if self.world_position_material == None:
-            materials_builder = MaterialsBuilder()
-            materials_builder.create_world_position_material(context)
-            self.world_position_material = find_material_by_name(
-                "WorldPosition")
-
         self.lens_shift_y_offset = round(bpy.data.cameras["Camera"].shift_y *
                                          context.scene.render.resolution_x)
 
@@ -63,6 +87,40 @@ class Renderer:
         bpy.app.handlers.render_complete.append(self._render_finished)
         bpy.app.handlers.render_cancel.append(self._render_reset)
 
+    def render_scene_v2(self, output_path, meta_output_path, meta_output_file_name, render_settings, callback):
+        self.set_output_path(output_path)
+        self.set_meta_output_path(meta_output_path, meta_output_file_name)
+
+        self._apply_render_settings(render_settings)
+        
+        self.set_override_material(None)
+
+        self.render_finished_callback = callback
+        self._render_started()
+        bpy.ops.render.render(write_still=True)
+        self.render_finished_callback()
+
+    def render_tile_index_map_v2(self, output_path, render_settings, callback):
+        self.set_output_path(output_path)
+        self.set_meta_output_path(None, None)
+
+        self._apply_render_settings(render_settings)
+
+        self.set_aa_with_background(False)
+
+        world_position_mat = find_material_by_name("WorldPosition")
+        self.set_override_material(world_position_mat)
+
+        self.render_finished_callback = callback
+        self._render_started()
+        bpy.ops.render.render(write_still=True)
+        self.render_finished_callback()
+
+    def _apply_render_settings(self, render_settings):
+        self.set_aa(render_settings.aa)
+        self.set_aa_with_background(render_settings.aa_with_background)
+        self.set_layer(render_settings.layer)
+
     # Render out the current scene
     def render(self, output_still, callback):
         self.context.scene.render.use_compositing = True
@@ -71,6 +129,7 @@ class Renderer:
         self._render_started()
 
         bpy.ops.render.render(write_still=output_still)  # "INVOKE_DEFAULT"
+        self.render_finished_callback()
 
     def render_composite(self, callback):
         self.context.scene.render.use_compositing = True
@@ -79,19 +138,25 @@ class Renderer:
         self._render_started()
 
         bpy.ops.render.render(write_still=False)  # "INVOKE_DEFAULT"
+        self.render_finished_callback()
 
-    def render_still(self, callback):
-        self.context.scene.render.use_compositing = False
+    def render_tile_index_map(self, callback):
+        self.context.scene.render.use_compositing = True
         self.render_finished_callback = callback
+        
+        self.context.scene.render.image_settings.file_format = "OPEN_EXR"
+        self.context.scene.render.image_settings.color_mode = "RGBA"
+        self.context.scene.render.image_settings.color_depth = "16"
 
         self._render_started()
 
         bpy.ops.render.render(write_still=True)  # "INVOKE_DEFAULT"
+        self.render_finished_callback()
 
     def _render_started(self):
         if self.rendering:
             return
-
+        
         print("Starting render...")
         self.rendering = True
 
@@ -99,17 +164,10 @@ class Renderer:
         if not self.rendering:
             return
 
-        print("Finished rendering")
+        print("Render Callback: Finished rendering")
 
-        # Start a timer before calling the callback as the render operator takes a bit to fully finish
-        #self.timer = threading.Timer(0.01, self._render_finished_safe)
-        # self.timer.start()
-
-        print("Reset renderer")
         self._render_reset()
-        print("Call callback")
-        if self.render_finished_callback != None:
-            self.render_finished_callback()
+
 
     def reset(self):
         self.set_multi_tile_size(1, 1)
@@ -118,6 +176,9 @@ class Renderer:
         self.set_aa_with_background(False)
         self.set_override_material(None)
         self.set_layer("Editor")
+        self.context.scene.render.image_settings.file_format = "PNG"
+        self.context.scene.render.image_settings.color_mode = "RGBA"
+        self.context.scene.render.image_settings.color_depth = "8"
 
     def _render_reset(self, _=None):
         if not self.rendering:
@@ -128,8 +189,7 @@ class Renderer:
         self.reset()
 
     def _render_finished_safe(self):
-        self.timer.cancel()
-
+        print ("Finished rendering safely")
         callback = self.render_finished_callback
 
         self._render_reset()
@@ -168,26 +228,54 @@ class Renderer:
                 i + 1)].material_override = material
 
     def set_multi_tile_offset(self, x, y):
-        materials_builder = MaterialsBuilder()
-        materials_builder.create_world_position_material(self.context, x, y)
         self.world_position_material = find_material_by_name(
             "WorldPosition")
+        
+        if self.world_position_material is None:
+            raise Exception("WorldPosition material could not be found, please click repair")
+
+        origin_x_node = None
+        origin_y_node = None
+        for key, value in self.world_position_material.node_tree.nodes.items():
+            if value.label == "Origin_x":
+                origin_x_node = value
+                value.outputs[0].default_value = x
+            if value.label == "Origin_y":
+                origin_y_node = value
+                value.outputs[0].default_value = y
+        if origin_x_node is None:
+            raise Exception("Origin_y node could not be found, please click repair")
+        if origin_y_node is None:
+            raise Exception("Origin_x node could not be found, please click repair")
+
         self.set_override_material(self.world_position_material)
 
-    def set_multi_tile_size(self, width, length):
+    def set_multi_tile_size(self, width, length, floor=-100):
+        self.world_position_material = find_material_by_name(
+            "WorldPosition")
+        
+        if self.world_position_material is None:
+            raise Exception("WorldPosition material could not be found, please click repair")
+
         width_node = None
         length_node = None
-        for key, value in self.context.scene.node_tree.nodes.items():
-            if value.label == "width":
+        floor_node = None
+        for key, value in self.world_position_material.node_tree.nodes.items():
+            if value.label == "Width":
                 width_node = value
                 value.outputs[0].default_value = width
-            if value.label == "length":
+            if value.label == "Length":
                 length_node = value
                 value.outputs[0].default_value = length
+            if value.label == "Floor":
+                floor_node = value
+                value.outputs[0].default_value = floor
         if width_node is None:
-            raise Exception("Width composite node could not be found, please click repair")
+            raise Exception("Width node could not be found, please click repair")
         if length_node is None:
-            raise Exception("Length composite node could not be found, please click repair")
+            raise Exception("Length node could not be found, please click repair")
+        if floor_node is None:
+            raise Exception("Floor node could not be found, please click repair")
 
     # Sets the active render layer
     def set_layer(self, layer_name):
@@ -215,7 +303,7 @@ class Renderer:
         self.context.scene.render.filepath = path
 
     # Sets the meta (material and tile mask) render output path
-    def set_meta_output_path(self, base, path):
+    def set_meta_output_path(self, base=None, path=None):
         # Find the file output node in the compositor to set the output file name and path
         material_index_output_node = find_node_by_label(
             self.context.scene.node_tree, "meta_output")
@@ -223,7 +311,11 @@ class Renderer:
         if material_index_output_node == None:
             raise Exception(
                 "The compositing node tree does not contain an output node for the material index.")
-
-        # Set the file name and output path for the mask
-        material_index_output_node.base_path = base
-        material_index_output_node.file_slots[0].path = path
+        
+        if path is None:
+            material_index_output_node.mute = True
+        else:
+            material_index_output_node.mute = False
+            # Set the file name and output path for the mask
+            material_index_output_node.base_path = base
+            material_index_output_node.file_slots[0].path = path

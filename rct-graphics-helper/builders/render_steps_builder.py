@@ -18,6 +18,7 @@ from ..builders.render_steps.set_layer import SetLayer
 from ..builders.render_steps.reset_renderer import ResetRenderer
 from ..builders.render_steps.quantize import Quantize
 from ..builders.render_steps.render_scene import RenderScene
+from ..builders.render_steps.set_animation_frame import SetAnimationFrame
 from ..builders.render_steps.output import Output
 from ..render_task import RenderTask
 
@@ -42,6 +43,11 @@ class RenderStepsBuilder:
     
     def set_visibility(self, objects, hide_render):
         step = SetVisibility(objects, hide_render)
+        self.steps.append(step)
+        return self
+    
+    def set_animation_frame(self, animation_frame_index):
+        step = SetAnimationFrame(animation_frame_index)
         self.steps.append(step)
         return self
     
@@ -100,8 +106,8 @@ class RenderStepsBuilder:
         self.previous_output = step.output
         return self
     
-    def render_tile_indices(self, render_props, width, length, offset_x=0, offset_y=0):
-        step = RenderTileIndices(self._gen_index(), render_props, width, length, offset_x, offset_y)
+    def render_tile_indices(self, render_props, width, length, offset_x=0, offset_y=0, floor=-100):
+        step = RenderTileIndices(self._gen_index(), render_props, width, length, offset_x, offset_y, floor)
         self.steps.append(step)
         self.previous_output = step.output
         return self

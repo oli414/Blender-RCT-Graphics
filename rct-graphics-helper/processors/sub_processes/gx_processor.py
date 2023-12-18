@@ -12,14 +12,21 @@ import bpy
 import os
 import subprocess
 
+from sys import platform
+
+from ...res.res import res_path
 from .sub_processor import SubProcessor
 
 # Processor for creating the GX image .dat file
 
-
 class GXProcessor(SubProcessor):
     def __init__(self, renderer):
         super().__init__()
+
+        self.gxc_path = "gxc"
+
+        if platform == "win32":
+            self.gxc_path = os.path.join(res_path, "dependencies", "libsawyer", "gxc.exe")
 
         self.renderer = renderer
 
@@ -36,7 +43,7 @@ class GXProcessor(SubProcessor):
             task.get_output_folder(), "images.dat")
 
         result = str(subprocess.check_output(
-            "gxc build \"" + gx_file_path + "\" \"" + manifest_file_path + "\"", shell=True))
+            "\"" +  self.gxc_path + "\" build \"" + gx_file_path + "\" \"" + manifest_file_path + "\"", shell=True))
 
         if not os.path.exists(gx_file_path):
             raise Exception(

@@ -1,4 +1,7 @@
+import bpy
 import math
+
+height_unit = 1/math.sqrt(6)*2
 
 def rotate_vec(x, y, view_angle):
     while view_angle < 0:
@@ -34,3 +37,15 @@ def tile_coord_to_sprite_offset(tile_x, tile_y, width, length, view_angle):
 def tile_index_to_sprite_offset(tile_index, width, length, view_angle):
     tile_x, tile_y = tile_index_to_tile_coord(tile_index, width)
     return tile_coord_to_sprite_offset(tile_x, tile_y, width, length, view_angle)
+
+def normalize(dir):
+    dx,dy,dz = dir
+    length = math.sqrt(dx*dx + dy*dy + dz*dz)
+    return (dx / length, dy / length, dz / length)
+
+
+def find_material_by_name(material_name):
+    for mat in bpy.data.materials:
+        if mat.name == material_name:
+            return mat
+    return None

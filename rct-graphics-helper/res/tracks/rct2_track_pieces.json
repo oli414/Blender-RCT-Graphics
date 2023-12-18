@@ -1,0 +1,712 @@
+{
+    "id": "rct2",
+    "track_pieces": [
+        {
+            "id": "flat_straight",
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "north",
+                    "is_entry_connection": true
+                },
+                {
+                    "position": [2, 0, 0],
+                    "direction": "north",
+                    "is_exit_connection": true
+                }
+            ]
+        },
+        {
+            "id": "gentle_incline",
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "gentle_incline_up,north",
+                    "is_entry_connection": true
+                },
+                {
+                    "position": [2, 0, 2],
+                    "direction": "gentle_incline_up,north",
+                    "is_exit_connection": true
+                }
+            ]
+        },
+        {
+            "id": "flat_to_gentle_incline",
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 1],
+                    "direction": "gentle_incline_up,north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ]
+        },
+        {
+            "id": "gentle_incline_to_flat",
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "gentle_incline_up,north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 1],
+                    "direction": "north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ]
+        },
+        {
+            "id": "small_turn",
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.1
+                },
+                {
+                    "position": [0, 2, 0],
+                    "direction": "west",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.1
+                }
+            ]
+        },
+        {
+            "id": "medium_turn",
+            "spline_points": [
+                {
+                    "position": [-4, 2, 0],
+                    "direction": "north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 3.5
+                },
+                {
+                    "position": [2, -4, 0],
+                    "direction": "east",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 3.5
+                }
+            ],
+            "width": 2,
+            "length": 2,
+            "track_length": 2,
+            "orientations": [
+                {
+                    "view_angle": 0,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 3
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 1,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 3
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2, 3]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 2,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 3
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 3,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 3
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "steep_incline",
+            "track_length": 2,
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "steep_incline_up,north",
+                    "is_entry_connection": true
+                },
+                {
+                    "position": [2, 0, 8],
+                    "direction": "steep_incline_up,north",
+                    "is_exit_connection": true
+                }
+            ]
+        },
+        {
+            "id": "flat_to_steep_incline_up",
+            "track_length": 2,
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 3],
+                    "direction": "steep_incline_up,north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ],
+            "orientations": [
+                {
+                    "view_angle": 0
+                },
+                {
+                    "view_angle": 1,
+                    "layered": true
+                },
+                {
+                    "view_angle": 2,
+                    "layered": true
+                },
+                {
+                    "view_angle": 3
+                }
+            ]
+        },
+        {
+            "id": "steep_incline_up_to_flat",
+            "track_length": 2,
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "steep_incline_up,north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 3],
+                    "direction": "north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ],
+            "orientations": [
+                {
+                    "view_angle": 0
+                },
+                {
+                    "view_angle": 1,
+                    "layered": true
+                },
+                {
+                    "view_angle": 2,
+                    "layered": true
+                },
+                {
+                    "view_angle": 3
+                }
+            ]
+        },
+        {
+            "id": "gentle_to_steep_incline_up",
+            "track_length": 2,
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "gentle_incline_up,north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 4],
+                    "direction": "steep_incline_up,north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ],
+            "orientations": [
+                {
+                    "view_angle": 0
+                },
+                {
+                    "view_angle": 1,
+                    "layered": true
+                },
+                {
+                    "view_angle": 2,
+                    "layered": true
+                },
+                {
+                    "view_angle": 3
+                }
+            ]
+        },
+        {
+            "id": "steep_to_gentle_incline_up",
+            "track_length": 2,
+            "spline_points": [
+                {
+                    "position": [-2, 0, 0],
+                    "direction": "steep_incline_up,north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 1.5
+                },
+                {
+                    "position": [2, 0, 4],
+                    "direction": "gentle_incline_up,north",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 1.5
+                }
+            ],
+            "orientations": [
+                {
+                    "view_angle": 0
+                },
+                {
+                    "view_angle": 1,
+                    "layered": true
+                },
+                {
+                    "view_angle": 2,
+                    "layered": true
+                },
+                {
+                    "view_angle": 3
+                }
+            ]
+        },
+        {
+            "id": "right_medium_turn_gentle_incline_up",
+            "spline_points": [
+                {
+                    "position": [-4, 2, 0],
+                    "direction": "gentle_incline_up,north",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 3.7
+                },
+                {
+                    "position": [2, -4, 4],
+                    "direction": "gentle_incline_up,east",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 3.7
+                }
+            ],
+            "width": 2,
+            "length": 2,
+            "track_length": 2,
+            "orientations": [
+                {
+                    "view_angle": 0,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 1,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 2,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 3,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "left_medium_turn_gentle_incline_up",
+            "spline_points": [
+                {
+                    "position": [2, -4, 0],
+                    "direction": "gentle_incline_up,west",
+                    "is_entry_connection": true,
+                    "forward_magnitude": 3.7
+                },
+                {
+                    "position": [-4, 2, 4],
+                    "direction": "gentle_incline_up,south",
+                    "is_exit_connection": true,
+                    "backward_magnitude": 3.7
+                }
+            ],
+            "width": 2,
+            "length": 2,
+            "track_length": 2,
+            "orientations": [
+                {
+                    "view_angle": 0,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 1,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 2,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "view_angle": 3,
+                    "fragments": [
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 1
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [3]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [1, 3]
+                                }
+                            ]
+                        },
+                        {
+                            "tiles": [
+                                {
+                                    "tile_index": 2
+                                },
+                                {
+                                    "tile_index": 0,
+                                    "quadrants": [2]
+                                },
+                                {
+                                    "tile_index": 3,
+                                    "quadrants": [0, 2]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

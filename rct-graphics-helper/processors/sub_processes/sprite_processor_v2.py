@@ -36,9 +36,6 @@ class SpriteProcessorV2(SubProcessor):
         super().__init__()
         self.renderer = renderer
 
-        self.it = 0
-        self.max_it = 200;
-
     def process(self, master_context, callback):
         def finalize(task_process_context):
             self._finalize(task_process_context)

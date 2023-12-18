@@ -8,8 +8,16 @@ RCT Graphics Helper is licensed under the GNU General Public License version 3.
 '''
 
 import bpy
+import bmesh
 import math
-from ..data.track_pieces import track_pieces
+import os
+
+from ..helpers import find_material_by_name
+from ..models.track_piece import SplineNode
+from ..models.track_piece_repository import TrackPieceRepository
+from ..models.track_type import load_track_type
+
+from ..res.res import res_path
 
 north = (1, 0, 0)
 east = (0, -1, 0)
@@ -58,72 +66,101 @@ class SplineBuilder:
     def build(self, context):
         main_track_base_objects = context.selected_objects
 
+        track_piece_repository = TrackPieceRepository([
+            os.path.join(res_path, "tracks", "rct2_track_pieces.json")
+        ])
+        track_type = load_track_type(
+            os.path.join(res_path, "tracks", "types", "rct2", "wild_mouse_coaster.json"),
+            track_piece_repository,
+        )
+
         index = 0
-        for track_piece in track_pieces:
-            repeat_track_model = 1
-            if "repeat_track_model" in track_piece:
-                repeat_track_model = track_piece["repeat_track_model"]
+        for track_piece in track_type.track_pieces:
+            base_track_piece = track_piece.base_track_piece
+            repeat_track_model = base_track_piece.track_length
 
-            piece = self.create_track_piece(context, track_piece["name"], track_piece["points"], main_track_base_objects, track_piece["offset"], repeat_track_model)
+            piece = self.create_track_piece(
+                context, track_piece.id, base_track_piece.spline_points, None, main_track_base_objects,
+                track_piece.scene_position, repeat_track_model
+            )
         
-            first_point = track_piece["points"][0]
-            last_point = track_piece["points"][len(track_piece["points"]) - 1]
+            in_count = 1
+            out_count = 1
+            for spline_point in base_track_piece.spline_points:
+                if spline_point.is_entry_connection:
+                    in_piece = self.create_track_piece(context, "in_{}_{}".format(in_count, track_piece.id), [
+                        spline_point.generate_previous_point(),
+                        spline_point
+                    ], piece, main_track_base_objects, track_piece.scene_position, 1, True, True)
+                    in_count += 1
+                if spline_point.is_exit_connection:
+                    out_piece = self.create_track_piece(context, "out_{}_{}".format(out_count, track_piece.id), [
+                        spline_point,
+                        spline_point.generate_next_point()
+                    ], piece, main_track_base_objects, track_piece.scene_position, 1, True, True)
+                    out_count += 1
 
-            p, nd, pd, bank = first_point
-            p = add(p, set_length(nd, 4))
-            nd = set_length(nd, 1)
-            pd = set_length(pd, 1)
-            in_piece = self.create_track_piece(context, "in_" + track_piece["name"], [
-                (p, nd, pd, bank),
-                first_point
-            ], main_track_base_objects, track_piece["offset"], 1, True)
-
-            p, nd, pd, bank = last_point
-            p = add(p, set_length(pd, 4))
-            nd = set_length(nd, 1)
-            pd = set_length(pd, 1)
-            out_piece = self.create_track_piece(context, "out_" + track_piece["name"], [
-                last_point,
-                (p, nd, pd, bank)
-            ], main_track_base_objects, track_piece["offset"], 1, True)
 
             index += 1
 
-    def create_track_piece(self, context, name, points, base_objects, offset, repeat=1, hide=False):
+    def create_track_piece(self, context, name, points, parent, base_objects, offset, repeat=1, hide=False, mask=False):
         spline_object = self.create_spline(context, name, points, offset)
         spline_object.hide = hide
+        spline_object.parent = parent
         context.scene.objects.link(spline_object)
 
+        generated_objects = []
         for obj in base_objects:
             target_obj_name = obj.name + "_obj_" + name
-            self.remove_scene_object(context, target_obj_name)
+
+            pre_existing = self.get_scene_object(context, target_obj_name)
+            if pre_existing is not None:
+                generated_objects.append(pre_existing)
+                continue
+
             target_obj = obj.copy()
             target_obj.name = target_obj_name
             target_obj.animation_data_clear()
             context.scene.objects.link(target_obj)
 
+            target_obj.parent = spline_object
+            generated_objects.append(target_obj)
+
             for i in range(20):
                 target_obj.layers[i] = obj.layers[i]
-            target_obj.hide = hide
-            target_obj.hide_render = hide
+                
+            if not target_obj.layers[0]:
+                target_obj.hide = True
+            else:
+                target_obj.hide = hide
 
-            if "Track Repeat" in target_obj.modifiers:
-                target_obj.modifiers.remove(target_obj.modifiers["Track Repeat"])
-            array_modifier = target_obj.modifiers.new("Track Repeat", 'ARRAY')
+            target_obj.hide_render = hide
+        
+        for obj in generated_objects:
+            obj.parent = spline_object
             
-            array_modifier.fit_type = "FIXED_COUNT"
-            array_modifier.count = repeat
+            array_modifier = None
+            if "Track Repeat" in obj.modifiers:
+                array_modifier = obj.modifiers["Track Repeat"]
+            else:
+                array_modifier = obj.modifiers.new("Track Repeat", 'ARRAY')
+                array_modifier.fit_type = "FIXED_COUNT"
+                array_modifier.count = repeat
+
             array_modifier.curve = spline_object
 
-            if "Track Curve" in target_obj.modifiers:
-                target_obj.modifiers.remove(target_obj.modifiers["Track Curve"])
-            curve_modifier = target_obj.modifiers.new("Track Curve", 'CURVE')
+            curve_modifier = None
+            if "Track Curve" in obj.modifiers:
+                curve_modifier = obj.modifiers["Track Curve"]
+            else:
+                curve_modifier = obj.modifiers.new("Track Curve", 'CURVE')
+            
             curve_modifier.object = spline_object
-        
+
         return spline_object
 
     def create_spline(self, context, name, points, offset):
-        name = self.prefix + "Track_Spline_" + name + self.suffix
+        name = self.prefix + name + self.suffix
         if name in bpy.data.curves:
             bpy.data.curves.remove(bpy.data.curves[name])
 
@@ -131,23 +168,25 @@ class SplineBuilder:
         curve_data.dimensions = '3D'
         curve_data.use_stretch = True
         curve_data.use_deform_bounds = True
+        curve_data.twist_mode = "Z_UP"
 
         bezier = curve_data.splines.new('BEZIER')
         bezier.bezier_points.add(len(points) - 1)
         for i, coord in enumerate(points):
-            p,nd,pd,bank = coord
+            p = coord.position
             x,y,z=p
-            ox,oy = offset
+            ox,oy,oz = offset
             x += ox
             y += oy
-            ndx,ndy,ndz=nd
-            pdx,pdy,pdz=pd
+            z += oz
+            ndx,ndy,ndz=coord.get_backward_direction()
+            pdx,pdy,pdz=coord.get_forward_direction()
             bezier.bezier_points[i].co = (x,y,z)
             bezier.bezier_points[i].handle_left_type  = 'FREE'
             bezier.bezier_points[i].handle_right_type = 'FREE'
             bezier.bezier_points[i].handle_left = (x + ndx, y + ndy, z + ndz)
             bezier.bezier_points[i].handle_right  = (x + pdx, y + pdy, z + pdz)
-            bezier.bezier_points[i].tilt = bank / 57.29577951308232
+            bezier.bezier_points[i].tilt = coord.bank / 57.29577951308232
 
         curve_object = self.create_scene_object(
             context, name, curve_data)
@@ -165,3 +204,8 @@ class SplineBuilder:
         if name in context.scene.objects:
             bpy.data.objects.remove(
                 context.scene.objects[name], do_unlink=True)
+
+    def get_scene_object(self, context, name):
+        if name in context.scene.objects:
+            return context.scene.objects[name]
+        return None

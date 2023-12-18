@@ -10,6 +10,8 @@ RCT Graphics Helper is licensed under the GNU General Public License version 3.
 from ...magick_command import MagickCommand
 from .render_step import RenderStep
 
+import subprocess
+
 class SelectTiles(RenderStep):
     def __init__(self, input, tile_meta_input, tiles):
         self.input = input
@@ -22,23 +24,50 @@ class SelectTiles(RenderStep):
         magick_command = MagickCommand(self.input["value"])
 
         if len(self.tiles) > 0:
-            master_mask = MagickCommand(self.tile_meta_input["value"])
-            master_mask.nullify_channels(["Red", "Blue"])
-            master_mask.write_to_cache("mask")
-            master_mask.id_mask(0, self.tiles[0], 0)
+            cached = False
+            previous_mask = None
+            for tile in self.tiles:
+                tile_index = tile
+                if type(tile) != int:
+                    tile_index = tile.tile_index
 
-            first_it = True
-            for tile_index in self.tiles:
-                if first_it:
-                    first_it = False
-                    continue
+                mask = MagickCommand(self.tile_meta_input["value"])
+                if not cached:
+                    mask = MagickCommand(self.tile_meta_input["value"])
+                    mask.write_to_cache("mask")
+                    cached = True
+                
+                mask.nullify_channels(["Green", "Blue"])
+                mask.id_mask(tile_index, 0, 0)
 
-                mask = MagickCommand("mpr:mask")
-                mask.id_mask(0, tile_index, 0)
+                if type(tile) != int:
+                    if tile.quadrants is not None:
+                        previous_quadrant_mask = None
+                        for quadrant in tile.quadrants:
+                            quadrant_mask = MagickCommand("mpr:mask")
+                            quadrant_mask.nullify_channels(["Red", "Blue"])
+                            quadrant_mask.id_mask(0, quadrant, 0)
 
-                master_mask.additive(mask)
-            
-            magick_command.mask_mix_self(master_mask)
+                            if previous_quadrant_mask == None:
+                                previous_quadrant_mask = quadrant_mask
+                            else:
+                                previous_quadrant_mask.additive(quadrant_mask)
+                        if previous_quadrant_mask is not None:
+                            mask.and_mask(previous_quadrant_mask)
+                            
+                if previous_mask == None:
+                    previous_mask = mask
+                else:
+                    previous_mask.additive(mask)
+
+            if previous_mask is not None:
+                floor_mask = MagickCommand(self.tile_meta_input["value"])
+                floor_mask.nullify_channels(["Red", "Blue"])
+                floor_mask.id_mask(0, 4, 0)
+                floor_mask.invert_id_mask()
+                previous_mask.and_mask(floor_mask)
+
+                magick_command.mask_mix_self(previous_mask)
 
         self.output["value"] = magick_command
         return True

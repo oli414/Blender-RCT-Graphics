@@ -204,7 +204,7 @@ class GraphicsHelperPanel(bpy.types.Panel):
         row.label("Work in progress")
         
         row = layout.row()
-        row.operator("render.rct_track_init", text="Generate Splines")
+        row.operator("render.rct_track_init", text="Generate/Update Track Splines")
         
         row = layout.row()
         row.prop(properties, "multi_layer")

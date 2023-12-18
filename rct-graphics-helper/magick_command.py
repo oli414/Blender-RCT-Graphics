@@ -1,7 +1,15 @@
-# Class for building magick commands
+'''
+Copyright (c) 2022 RCT Graphics Helper developers
+
+For a complete list of all authors, please refer to the addon's meta info.
+Interested in contributing? Visit https://github.com/oli414/Blender-RCT-Graphics
+
+RCT Graphics Helper is licensed under the GNU General Public License version 3.
+'''
+
 import os
 
-
+# Class for building magick commands
 class MagickCommand(object):
     full_command = ""
 
@@ -51,6 +59,12 @@ class MagickCommand(object):
         self.full_command += " -fill \"#00000000\" +opaque \"" + \
             color + "\" -fill \"#ffffffff\" -opaque \"" + \
             color + "\""
+        
+    def invert_id_mask(self):
+        self.full_command = "( " + self.full_command + " ) " + \
+            " -alpha on -channel rgba -fill \"#ff0000ff\" -opaque \"#00000000\""
+        self.full_command += "  -fill \"#00000000\" -opaque \"#ffffffff\""
+        self.full_command += "  -fill \"#ffffffff\" -opaque \"#ff0000ff\""
 
     # Replaces all instances of color with color2
     def replace_color(self, color, color2):
@@ -61,6 +75,12 @@ class MagickCommand(object):
         self.full_command = "( " + self.full_command + " ) " + \
             self.__stringify_input(sourceB) + " " + \
             self.__stringify_input(mask) + " -composite"
+        
+    # Multiplies between the current source and sourceB
+    def and_mask(self, sourceB):
+        self.full_command = "( " + self.full_command + " ) " + \
+            "-alpha on ( +clone -channel a -fx 0 ) +swap " + \
+            self.__stringify_input(sourceB) + " -compose Multiply -alpha on -channel rgba -composite -fill \"#00000000\" -opaque \"#000000ff\""
 
     # Mixes between the current source, alpha given a mask
     def mask_mix_self(self, mask):
@@ -90,9 +110,9 @@ class MagickCommand(object):
     def copy_alpha_v2(self, alpha_source):
         mask = self.__stringify_input(
             alpha_source)
-        self.full_command = "( " + self.full_command + \
+        self.full_command = "( ( " + self.full_command + \
             " ) ( " + \
-            mask + " ) -compose Dst_In -alpha Set -composite"
+            mask + " ) -compose Dst_In -alpha Set -composite )"
         
     # Copies the alpha channel from the alpha_source and applies the inverse to the current source
     def copy_alpha_inverted_v2(self, alpha_source):
@@ -119,7 +139,7 @@ class MagickCommand(object):
     def get_command_string(self, magick_path, output):
         if self.use_repage:
             self.full_command = self.full_command + " +repage"
-        final_command = magick_path + " " + self.full_command + " \"" + output + "\""
+        final_command = "\"" + magick_path + "\" " + self.full_command + " \"" + output + "\""
         if os.name == "posix":
             final_command = final_command.replace("(", "\(").replace(")", "\)")
         return final_command

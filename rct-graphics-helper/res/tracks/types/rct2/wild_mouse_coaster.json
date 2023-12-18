@@ -1,0 +1,169 @@
+{
+    "id": "rct2.wild_mouse_coaster",
+    "name": "Wild Mouse Coaster",
+    "track_pieces": [
+        {
+            "id": "flat_straight",
+            "scene_position": [0, -8, 0],
+            "base_track_piece": "rct2.flat_straight",
+            "output_indices": [16900, 16901],
+            "limit_orientations": 2
+        },
+        {
+            "id": "gentle_incline",
+            "scene_position": [0, 8, 0],
+            "base_track_piece": "rct2.gentle_incline",
+            "output_indices": [16922, 16923, 16924, 16925]
+        },
+        {
+            "id": "flat_to_gentle_incline",
+            "scene_position": [0, 16, 0],
+            "base_track_piece": "rct2.flat_to_gentle_incline",
+            "output_indices": [16914, 16915, 16916, 16917]
+        },
+        {
+            "id": "gentle_incline_to_flat",
+            "scene_position": [0, 24, 0],
+            "base_track_piece": "rct2.gentle_incline_to_flat",
+            "output_indices": [16918, 16919, 16920, 16921]
+        },
+        {
+            "id": "steep_incline",
+            "scene_position": [0, 32, 0],
+            "base_track_piece": "rct2.steep_incline",
+            "output_indices": [16938, 16939, 16940, 16941]
+        },
+        {
+            "id": "gentle_to_steep_incline_up",
+            "scene_position": [0, 40, 0],
+            "base_track_piece": "rct2.gentle_to_steep_incline_up",
+            "output_indices": [16926, 16927, 16928, 16929, 16930, 16931]
+        },
+        {
+            "id": "steep_to_gentle_incline_up",
+            "scene_position": [0, 48, 0],
+            "base_track_piece": "rct2.steep_to_gentle_incline_up",
+            "output_indices": [16932, 16933, 16934, 16935, 16936, 16937]
+        },
+        {
+            "id": "flat_to_steep_incline_up",
+            "scene_position": [0, 56, 0],
+            "base_track_piece": "rct2.flat_to_steep_incline_up",
+            "output_indices": [16970, 16971, 16972, 16973, 16974, 16975]
+        },
+        {
+            "id": "steep_incline_up_to_flat",
+            "scene_position": [0, 64, 0],
+            "base_track_piece": "rct2.steep_incline_up_to_flat",
+            "output_indices": [16976, 16977, 16978, 16979, 16980, 16981]
+        },
+        {
+            "id": "flat_straight_brakes",
+            "scene_position": [16, -8, 0],
+            "base_track_piece": "rct2.flat_straight",
+            "output_indices": [16902, 16903],
+            "limit_orientations": 2
+        },
+        {
+            "id": "flat_straight_chain_lift",
+            "scene_position": [32, -8, 0],
+            "base_track_piece": "rct2.flat_straight",
+            "output_indices": [16910, 16911, 16912, 16913]
+        },
+        {
+            "id": "gentle_incline_chain_lift",
+            "scene_position": [32, 8, 0],
+            "base_track_piece": "rct2.gentle_incline",
+            "output_indices": [16950, 16951, 16952, 16953]
+        },
+        {
+            "id": "flat_to_gentle_incline_chain_lift",
+            "scene_position": [32, 16, 0],
+            "base_track_piece": "rct2.flat_to_gentle_incline",
+            "output_indices": [16942, 16943, 16944, 16945]
+        },
+        {
+            "id": "gentle_incline_to_flat_chain_lift",
+            "scene_position": [32, 24, 0],
+            "base_track_piece": "rct2.gentle_incline_to_flat",
+            "output_indices": [16946, 16947, 16948, 16949]
+        },
+        {
+            "id": "steep_incline_chain_lift",
+            "scene_position": [32, 32, 0],
+            "base_track_piece": "rct2.steep_incline",
+            "output_indices": [16966, 16967, 16968, 16969]
+        },
+        {
+            "id": "gentle_to_steep_incline_up_chain_lift",
+            "scene_position": [32, 40, 0],
+            "base_track_piece": "rct2.gentle_to_steep_incline_up",
+            "output_indices": [16954, 16955, 16956, 16957, 16958, 16959]
+        },
+        {
+            "id": "steep_to_gentle_incline_up_chain_lift",
+            "scene_position": [32, 48, 0],
+            "base_track_piece": "rct2.steep_to_gentle_incline_up",
+            "output_indices": [16960, 16961, 16962, 16963, 16964, 16965]
+        },
+        {
+            "id": "flat_to_steep_incline_up_chain_lift",
+            "scene_position": [32, 56, 0],
+            "base_track_piece": "rct2.flat_to_steep_incline_up",
+            "output_indices": [16982, 16983, 16984, 16985, 16986, 16987]
+        },
+        {
+            "id": "steep_incline_up_to_flat_chain_lift",
+            "scene_position": [32, 64, 0],
+            "base_track_piece": "rct2.steep_incline_up_to_flat",
+            "output_indices": [16988, 16989, 16990, 16991, 16992, 16993]
+        },
+        {
+            "id": "flat_straight_block_brakes_open",
+            "scene_position": [48, -8, 0],
+            "base_track_piece": "rct2.flat_straight",
+            "output_indices": [16904, 16905, 16906, 16907],
+            "limit_orientations": 2,
+            "animation_frames": 2
+        },
+        {
+            "id": "flat_straight_spinning_control",
+            "scene_position": [64, -8, 0],
+            "base_track_piece": "rct2.flat_straight",
+            "output_indices": [16908, 16909],
+            "limit_orientations": 2
+        },
+        {
+            "id": "small_turn",
+            "scene_position": [-16, 0, 0],
+            "base_track_piece": "rct2.small_turn",
+            "output_indices": [16994, 16995, 16996, 16997]
+        },
+        {
+            "id": "medium_turn",
+            "scene_position": [-32, 0, 0],
+            "base_track_piece": "rct2.medium_turn",
+            "output_indices": [16998, 16999, 17000, 17001, 17002, 17003, 17004, 17005, 17006, 17007, 17008, 17009]
+        },
+        {
+            "id": "right_medium_turn_gentle_incline_up",
+            "scene_position": [-32, 16, 0],
+            "base_track_piece": "rct2.right_medium_turn_gentle_incline_up",
+            "output_indices": [17010, 17011, 17012, 17013, 17014, 17015, 17016, 17017],
+            "fragment_offsets": [
+                [6, 0, 0],
+                [0, 6, -2]
+            ]
+        },
+        {
+            "id": "left_medium_turn_gentle_incline_up",
+            "scene_position": [-32, 32, 0],
+            "base_track_piece": "rct2.left_medium_turn_gentle_incline_up",
+            "output_indices": [17018, 17019, 17020, 17021, 17022, 17023, 17024, 17025],
+            "fragment_offsets": [
+                [6, 0, -2],
+                [0, 6, 0]
+            ]
+        }
+    ]
+}

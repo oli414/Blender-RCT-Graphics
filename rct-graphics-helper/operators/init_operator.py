@@ -15,6 +15,7 @@ from ..builders.materials_builder import MaterialsBuilder
 
 from ..builders.scene_builder import SceneBuilder
 from ..builders.compositor_builder import CompositorBuilder
+from ..res.res import res_path
 
 
 class Init(bpy.types.Operator):
@@ -26,8 +27,9 @@ class Init(bpy.types.Operator):
 
     def execute(self, context):
         # Setup render settings
-        context.scene.render.resolution_x = 96
-        context.scene.render.resolution_y = 96
+        if context.scene.render.resolution_x == 1920 and context.scene.render.resolution_x == 1080:
+            context.scene.render.resolution_x = 96
+            context.scene.render.resolution_y = 96
         context.scene.render.resolution_percentage = 100
 
         # Output
@@ -63,14 +65,14 @@ class Init(bpy.types.Operator):
         track_layer = self.create_render_layer(context, "Track")
         track_layer.layers = (True, False, False, False, False, False, False, False,
                               False, False, False, False, False, False, False, False, False, False, False, False)
-        track_layer.layers_zmask = (True, False, False, False, False, False, False, False,
+        track_layer.layers_zmask = (True, False, True, False, False, False, False, False,
                                     False, False, False, False, False, False, False, False, False, False, False, False)
         track_layer.use = False
         
         track_occluded_layer = self.create_render_layer(context, "Track Occluded")
         track_occluded_layer.layers = (False, True, False, False, False, False, False, False,
                               False, False, False, False, False, False, False, False, False, False, False, False)
-        track_occluded_layer.layers_zmask = (True, False, False, False, False, False, False, False,
+        track_occluded_layer.layers_zmask = (True, False, True, False, False, False, False, False,
                                     False, False, False, False, False, False, False, False, False, False, False, False)
         track_occluded_layer.use = False
 
@@ -79,13 +81,45 @@ class Init(bpy.types.Operator):
         # Create dependencies in the context
         sceneBuilder = SceneBuilder()
         sceneBuilder.build(context)
+        
+        bpy.data.cameras["Camera"].shift_x = -0.000345 * \
+            96 / context.scene.render.resolution_x
+        bpy.data.cameras["Camera"].ortho_scale = 169.72 / \
+            (1920 / context.scene.render.resolution_x)
 
         compositorBuilder = CompositorBuilder()
         compositorBuilder.build(context)
 
-        materialsBuilder = MaterialsBuilder()
-        materialsBuilder.build(context)
+        template_path = os.path.join(res_path, "templates/internal_template.blend")
 
+
+        material_replacements = []
+
+        with bpy.data.libraries.load(template_path) as (data_from, data_to):
+            for material in data_from.materials:
+                replacement = {
+                    "new": material
+                }
+                if context.blend_data.materials.get(material) is not None:
+                    material_data = context.blend_data.materials.get(material)
+                    material_data.name = material + "__DELETE__"
+                    replacement["old"] = material_data.name
+                material_replacements.append(replacement)
+            data_to.materials = data_from.materials
+
+        for material in material_replacements:
+            new_mat = context.blend_data.materials.get(material["new"])
+            new_mat.use_fake_user = True
+            
+            if "old" in material:
+                old_mat = context.blend_data.materials.get(material["old"])
+                for o in bpy.data.objects:
+                        for slot in o.material_slots:
+                            if slot.material == old_mat:
+                                slot.material = new_mat
+                if old_mat:
+                    context.blend_data.materials.remove(old_mat)
+        
         return {'FINISHED'}
 
     def delete_default_render_layer(self, context):

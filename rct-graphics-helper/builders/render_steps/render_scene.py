@@ -30,9 +30,11 @@ class RenderScene(RenderStep):
 
         meta_output_name = output_name + "_meta"
         if self.output_meta:
-            self.meta_output["value"] = os.path.join(context.temp_path, meta_output_name + "0000.exr")
+            self.meta_output["value"] = os.path.join(context.temp_path, meta_output_name + "{:04d}.exr".format(context.renderer.context.scene.frame_current))
             print("Writing meta render to {}".format(self.meta_output["value"]))
-        context.renderer.set_meta_output_path(context.temp_path, meta_output_name)
+            context.renderer.set_meta_output_path(context.temp_path, meta_output_name)
+        else:
+            context.renderer.set_meta_output_path(None, None)
 
         context.renderer.render(True, callback)
 
